@@ -1,0 +1,208 @@
+meta {
+  name: Delete a scheduled message
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/chat.deleteScheduledMessage
+  body: json
+  auth: oauth2
+}
+
+headers {
+  token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: chat:write:user chat:write:bot links:write none
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+body:json {
+  {
+    "channel": "",
+    "scheduled_message_id": "",
+    "as_user": false
+  }
+}
+
+example {
+  name: Example of a successful response (Example request to delete a scheduled message)
+  
+  request: {
+    url: {{baseUrl}}/chat.deleteScheduledMessage
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C1H9RESGL",
+        "scheduled_message_id": "Q1298393284",
+        "as_user": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example of a successful response (Example request to delete a scheduled message)
+  
+  request: {
+    url: {{baseUrl}}/chat.deleteScheduledMessage
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "",
+        "scheduled_message_id": "",
+        "as_user": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example of an error response for chat.deleteScheduledMessage (Example request to delete a scheduled message)
+  
+  request: {
+    url: {{baseUrl}}/chat.deleteScheduledMessage
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C1H9RESGL",
+        "scheduled_message_id": "Q1298393284",
+        "as_user": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_scheduled_message_id"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example of an error response for chat.deleteScheduledMessage (Example request to delete a scheduled message)
+  
+  request: {
+    url: {{baseUrl}}/chat.deleteScheduledMessage
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "",
+        "scheduled_message_id": "",
+        "as_user": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_scheduled_message_id"
+        }
+      '''
+    }
+  }
+}

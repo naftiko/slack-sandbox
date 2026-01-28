@@ -1,0 +1,141 @@
+meta {
+  name: Get Call information
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/calls.info
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  id: 
+}
+
+headers {
+  token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: calls:read calls:write
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Example of a successful calls.info response
+  
+  request: {
+    url: {{baseUrl}}/calls.info
+    method: GET
+    mode: none
+    params:query: {
+      id: 
+    }
+  
+    headers: {
+      token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "call": {
+            "Id": "R1234567890",
+            "ExternalUniqueId": "zoom-meeting-123456789",
+            "ExternalDisplayId": "ZOOM-2024-001",
+            "JoinUrl": "https://zoom.us/j/123456789",
+            "DesktopAppJoinUrl": "zoommtg://zoom.us/join?confno=123456789",
+            "Title": "Weekly Team Standup",
+            "DateStart": 1704067200,
+            "DateEnd": 1704070800,
+            "Users": [
+              {
+                "SlackId": "U1234567890",
+                "DisplayName": "John Doe"
+              },
+              {
+                "SlackId": "U0987654321",
+                "DisplayName": "Jane Smith"
+              },
+              {
+                "SlackId": "U1111111111",
+                "DisplayName": "Bob Wilson"
+              }
+            ],
+            "Channels": [
+              "C1234567890",
+              "C0987654321"
+            ]
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example of an error response
+  
+  request: {
+    url: {{baseUrl}}/calls.info
+    method: GET
+    mode: none
+    params:query: {
+      id: 
+    }
+  
+    headers: {
+      token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

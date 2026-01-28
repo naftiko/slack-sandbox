@@ -1,0 +1,219 @@
+meta {
+  name: Test Authentication
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/auth.test
+  body: none
+  auth: oauth2
+}
+
+headers {
+  token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: none
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful auth test with user token
+  
+  request: {
+    url: {{baseUrl}}/auth.test
+    method: GET
+    mode: none
+    headers: {
+      token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "url": "https://subarachnoid.slack.com/",
+          "team": "Subarachnoid Workspace",
+          "user": "grace",
+          "team_id": "T12345678",
+          "user_id": "W12345678"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Successful auth test with bot token
+  
+  request: {
+    url: {{baseUrl}}/auth.test
+    method: GET
+    mode: none
+    headers: {
+      token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "url": "https://subarachnoid.slack.com/",
+          "team": "Subarachnoid Workspace",
+          "user": "mybot",
+          "team_id": "T12345678",
+          "user_id": "U87654321",
+          "bot_id": "B12345678"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Successful auth test with enterprise install
+  
+  request: {
+    url: {{baseUrl}}/auth.test
+    method: GET
+    mode: none
+    headers: {
+      token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "url": "https://subarachnoid.slack.com/",
+          "team": "Subarachnoid Workspace",
+          "user": "grace",
+          "team_id": "T12345678",
+          "user_id": "W12345678",
+          "is_enterprise_install": true,
+          "enterprise_id": "E12345678"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Invalid authentication error
+  
+  request: {
+    url: {{baseUrl}}/auth.test
+    method: GET
+    mode: none
+    headers: {
+      token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Token revoked error
+  
+  request: {
+    url: {{baseUrl}}/auth.test
+    method: GET
+    mode: none
+    headers: {
+      token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "token_revoked"
+        }
+      '''
+    }
+  }
+}

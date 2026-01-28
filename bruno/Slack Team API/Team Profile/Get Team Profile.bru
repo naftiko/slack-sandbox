@@ -1,0 +1,150 @@
+meta {
+  name: Get Team Profile
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/team.profile.get
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  token: 
+  ~visibility: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: admin team:read users.profile:read
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful team profile response
+  
+  request: {
+    url: {{baseUrl}}/team.profile.get
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~visibility: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "profile": {
+            "fields": [
+              {
+                "id": "Xf06054AAA",
+                "label": "Phone extension",
+                "hint": "Enter the extension to reach your desk",
+                "type": "text",
+                "ordering": 0,
+                "is_hidden": 1,
+                "options": null,
+                "possible_values": null
+              },
+              {
+                "id": "Xf06054BBB",
+                "label": "Date of birth",
+                "hint": "When you were born",
+                "type": "date",
+                "ordering": 1,
+                "options": null,
+                "possible_values": null
+              },
+              {
+                "id": "Xf06054CCC",
+                "label": "Facebook",
+                "hint": "Enter a link to your Facebook profile",
+                "type": "link",
+                "ordering": 2,
+                "options": null,
+                "possible_values": null
+              },
+              {
+                "id": "Xf06054DDD",
+                "label": "House",
+                "hint": "Hogwarts, obviously",
+                "type": "options_list",
+                "ordering": 3,
+                "options": null,
+                "possible_values": [
+                  "Gryffindor",
+                  "Hufflepuff",
+                  "Ravenclaw",
+                  "Slytherin"
+                ]
+              }
+            ]
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Error response for invalid auth
+  
+  request: {
+    url: {{baseUrl}}/team.profile.get
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~visibility: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

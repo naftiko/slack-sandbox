@@ -1,0 +1,224 @@
+meta {
+  name: Search Messages
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/search.messages
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  token: 
+  query: 
+  ~count: 
+  ~page: 
+  ~highlight: 
+  ~sort: 
+  ~sort_dir: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: search:read
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful search results
+  description: Example of a successful search returning two matching messages
+  
+  request: {
+    url: {{baseUrl}}/search.messages
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      query: 
+      ~count: 
+      ~page: 
+      ~highlight: 
+      ~sort: 
+      ~sort_dir: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "query": "The meaning of life the universe and everything",
+          "messages": {
+            "matches": [
+              {
+                "type": "message",
+                "channel": {
+                  "id": "C12345678",
+                  "name": "general",
+                  "is_private": false,
+                  "is_shared": false,
+                  "is_ext_shared": false,
+                  "is_mpim": false,
+                  "is_org_shared": false,
+                  "is_pending_ext_shared": false,
+                  "pending_shared": []
+                },
+                "user": "U2U85N1RV",
+                "username": "roach",
+                "text": "The meaning of life the universe and everything is 42.",
+                "ts": "1508284197.000015",
+                "permalink": "https://hitchhikers.slack.com/archives/C12345678/p1508284197000015",
+                "team": "T12345678",
+                "iid": "cb64bdaa-c1e8-4631-8a91-0f78080113e9"
+              },
+              {
+                "type": "message",
+                "channel": {
+                  "id": "C87654321",
+                  "name": "random",
+                  "is_private": false,
+                  "is_shared": false,
+                  "is_ext_shared": false,
+                  "is_mpim": false,
+                  "is_org_shared": false,
+                  "is_pending_ext_shared": false,
+                  "pending_shared": []
+                },
+                "user": "U3U96N2RW",
+                "username": "robot_overlord",
+                "text": "The meaning of life the universe and everything is 101010",
+                "ts": "1508795665.000236",
+                "permalink": "https://hitchhikers.slack.com/archives/C87654321/p1508795665000236",
+                "team": "T12345678",
+                "iid": "9a00d3c9-bd2d-45b0-988b-6cff99ae2a90"
+              }
+            ],
+            "total": 2,
+            "pagination": {
+              "page": 1,
+              "page_count": 1,
+              "per_page": 20,
+              "total_count": 2,
+              "first": 1,
+              "last": 2
+            },
+            "paging": {
+              "count": 20,
+              "page": 1,
+              "pages": 1,
+              "total": 2
+            }
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: No query provided error
+  description: Error response when the query parameter is missing
+  
+  request: {
+    url: {{baseUrl}}/search.messages
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      query: 
+      ~count: 
+      ~page: 
+      ~highlight: 
+      ~sort: 
+      ~sort_dir: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 400
+      text: Bad Request
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "no_query"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Invalid authentication error
+  description: Error response when the authentication token is invalid
+  
+  request: {
+    url: {{baseUrl}}/search.messages
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      query: 
+      ~count: 
+      ~page: 
+      ~highlight: 
+      ~sort: 
+      ~sort_dir: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

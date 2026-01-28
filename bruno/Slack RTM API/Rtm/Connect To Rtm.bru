@@ -1,0 +1,117 @@
+meta {
+  name: Connect To Rtm
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/rtm.connect
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  token: 
+  ~batch_presence_aware: 
+  ~presence_sub: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: rtm:stream
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful RTM connection
+  
+  request: {
+    url: {{baseUrl}}/rtm.connect
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~batch_presence_aware: 
+      ~presence_sub: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "self": {
+            "id": "U4X318ZMZ",
+            "name": "robotoverlord"
+          },
+          "team": {
+            "id": "T2U81E2FP",
+            "name": "SlackDemo",
+            "domain": "slackdemo"
+          },
+          "url": "wss://cerberus-xxxx.lb.slack-msgs.com/websocket/abc123"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Authentication error
+  
+  request: {
+    url: {{baseUrl}}/rtm.connect
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~batch_presence_aware: 
+      ~presence_sub: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

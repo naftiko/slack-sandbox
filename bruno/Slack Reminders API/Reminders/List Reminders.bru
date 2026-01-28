@@ -1,0 +1,121 @@
+meta {
+  name: List Reminders
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/reminders.list
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  ~token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: reminders:read reminders:write
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successfully retrieved reminders list
+  
+  request: {
+    url: {{baseUrl}}/reminders.list
+    method: GET
+    mode: none
+    params:query: {
+      ~token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "reminders": [
+            {
+              "id": "Rm12345678",
+              "creator": "U1234567890",
+              "user": "U1234567890",
+              "text": "Submit the quarterly report",
+              "recurring": false,
+              "time": 1706180400,
+              "complete_ts": 0
+            },
+            {
+              "id": "Rm87654321",
+              "creator": "U1234567890",
+              "user": "U1234567890",
+              "text": "Weekly team standup",
+              "recurring": true,
+              "time": 1706094000,
+              "complete_ts": 0
+            }
+          ]
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Authentication error
+  
+  request: {
+    url: {{baseUrl}}/reminders.list
+    method: GET
+    mode: none
+    params:query: {
+      ~token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

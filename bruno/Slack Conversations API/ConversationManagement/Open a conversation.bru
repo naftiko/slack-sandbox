@@ -1,0 +1,216 @@
+meta {
+  name: Open a conversation
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/conversations.open
+  body: json
+  auth: oauth2
+}
+
+headers {
+  ~token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: channels:read channels:write channels:history groups:read groups:write groups:history im:read im:write im:history mpim:read mpim:write mpim:history
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+body:json {
+  {
+    "channel": "",
+    "users": "",
+    "return_im": false
+  }
+}
+
+example {
+  name: Example of a successful open response (Example request to open a DM)
+  
+  request: {
+    url: {{baseUrl}}/conversations.open
+    method: POST
+    mode: json
+    headers: {
+      ~token: 
+    }
+  
+    body:json: {
+      {
+        "users": "U012A3CDE",
+        "return_im": true
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "channel": {
+            "id": "D069C7QFK"
+          },
+          "no_op": false,
+          "already_open": false
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example of a successful open response (Example request to open a DM)
+  
+  request: {
+    url: {{baseUrl}}/conversations.open
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      ~token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "",
+        "users": "",
+        "return_im": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "channel": {
+            "id": "D069C7QFK"
+          },
+          "no_op": false,
+          "already_open": false
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example error response for open (Example request to open a DM)
+  
+  request: {
+    url: {{baseUrl}}/conversations.open
+    method: POST
+    mode: json
+    headers: {
+      ~token: 
+    }
+  
+    body:json: {
+      {
+        "users": "U012A3CDE",
+        "return_im": true
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "channel_not_found"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example error response for open (Example request to open a DM)
+  
+  request: {
+    url: {{baseUrl}}/conversations.open
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      ~token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "",
+        "users": "",
+        "return_im": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "channel_not_found"
+        }
+      '''
+    }
+  }
+}

@@ -1,0 +1,157 @@
+meta {
+  name: List Restricted Apps
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/admin.apps.restricted.list
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  token: 
+  ~limit: 
+  ~cursor: 
+  ~team_id: 
+  ~enterprise_id: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: admin.apps:read admin.apps:write admin.conversations:read admin.conversations:write admin.invites:read admin.invites:write admin.teams:read admin.teams:write admin.Use Groups:read admin.Use Groups:write admin.users:read admin.users:write
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful restricted apps list response
+  
+  request: {
+    url: {{baseUrl}}/admin.apps.restricted.list
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~limit: 
+      ~cursor: 
+      ~team_id: 
+      ~enterprise_id: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "restricted_apps": [
+            {
+              "app": {
+                "id": "A0FDLP8M2L",
+                "name": "My Test App",
+                "description": "A fun test app for Slack",
+                "help_url": "https://example.com",
+                "privacy_policy_url": "https://example.com",
+                "app_homepage_url": "https://example.com",
+                "app_directory_url": "https://myteam.enterprise.slack.com/apps/A0FDLP8M2L-my-test-app",
+                "is_app_directory_approved": true,
+                "is_internal": false,
+                "additional_info": "",
+                "icons": {
+                  "image_32": "https://example.com/icon_32.png",
+                  "image_48": "https://example.com/icon_48.png",
+                  "image_64": "https://example.com/icon_64.png",
+                  "image_72": "https://example.com/icon_72.png",
+                  "image_96": "https://example.com/icon_96.png",
+                  "image_128": "https://example.com/icon_128.png",
+                  "image_192": "https://example.com/icon_192.png",
+                  "image_512": "https://example.com/icon_512.png",
+                  "image_1024": "https://example.com/icon_1024.png",
+                  "image_original": "https://example.com/icon_original.png"
+                }
+              },
+              "scopes": [
+                {
+                  "name": "files:write:user",
+                  "description": "Upload, edit, and delete files on the user's behalf",
+                  "is_sensitive": true,
+                  "token_type": "user"
+                }
+              ],
+              "date_updated": 1574296721,
+              "last_resolved_by": {
+                "actor_id": "W0G82LMFD",
+                "actor_type": "user"
+              }
+            }
+          ],
+          "response_metadata": {
+            "next_cursor": ""
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Invalid authentication error
+  
+  request: {
+    url: {{baseUrl}}/admin.apps.restricted.list
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~limit: 
+      ~cursor: 
+      ~team_id: 
+      ~enterprise_id: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

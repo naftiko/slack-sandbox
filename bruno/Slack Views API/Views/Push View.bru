@@ -1,0 +1,169 @@
+meta {
+  name: Push View
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/views.push
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  trigger_id: 
+  view: 
+}
+
+headers {
+  token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: none
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful view push response
+  
+  request: {
+    url: {{baseUrl}}/views.push
+    method: GET
+    mode: none
+    params:query: {
+      trigger_id: 
+      view: 
+    }
+  
+    headers: {
+      token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "view": {
+            "id": "VNM522E2U",
+            "type": "modal",
+            "title": {
+              "type": "plain_text",
+              "text": "Pushed Modal",
+              "emoji": true
+            },
+            "submit": {
+              "type": "plain_text",
+              "text": "Save",
+              "emoji": true
+            },
+            "close": {
+              "type": "plain_text",
+              "text": "Back",
+              "emoji": true
+            },
+            "blocks": [
+              {
+                "type": "input",
+                "block_id": "edit_details",
+                "element": {
+                  "type": "plain_text_input",
+                  "action_id": "detail_input"
+                },
+                "label": {
+                  "type": "plain_text",
+                  "text": "Edit details"
+                },
+                "optional": false
+              }
+            ],
+            "private_metadata": "",
+            "callback_id": "view_4",
+            "clear_on_close": true,
+            "notify_on_close": false,
+            "external_id": "",
+            "hash": "1569362015.55b5e41b",
+            "root_view_id": "VNN729E3U",
+            "previous_view_id": null,
+            "app_id": "AAD3351BQ",
+            "bot_id": "BADF7A34H",
+            "team_id": "T9M4RL1JM",
+            "state": {
+              "values": {}
+            }
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Missing required field error response
+  
+  request: {
+    url: {{baseUrl}}/views.push
+    method: GET
+    mode: none
+    params:query: {
+      trigger_id: 
+      view: 
+    }
+  
+    headers: {
+      token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_arguments",
+          "response_metadata": {
+            "messages": [
+              "missing required field: title"
+            ]
+          }
+        }
+      '''
+    }
+  }
+}

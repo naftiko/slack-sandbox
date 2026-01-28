@@ -1,0 +1,125 @@
+meta {
+  name: List Emoji
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/admin.emoji.list
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  token: 
+  ~cursor: 
+  ~limit: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: admin.apps:read admin.apps:write admin.conversations:read admin.conversations:write admin.invites:read admin.invites:write admin.teams:read admin.teams:write admin.Use Groups:read admin.Use Groups:write admin.users:read admin.users:write
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful emoji list response
+  
+  request: {
+    url: {{baseUrl}}/admin.emoji.list
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~cursor: 
+      ~limit: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "emoji": {
+            "bowtie": "https://emoji.slack-edge.com/T9TK3CUKW/bowtie/f3ec6f2bb0.png",
+            "squirrel": "https://emoji.slack-edge.com/T9TK3CUKW/squirrel/465f40c0e0.png",
+            "shipit": "alias:squirrel",
+            "black_square": "alias:black_large_square"
+          },
+          "categories": [
+            {
+              "name": "Smileys & People",
+              "emoji_names": [
+                "grinning",
+                "grin",
+                "joy"
+              ]
+            }
+          ],
+          "categories_version": "5",
+          "cache_ts": "1575283387.000000"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Invalid authentication error
+  
+  request: {
+    url: {{baseUrl}}/admin.emoji.list
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~cursor: 
+      ~limit: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

@@ -1,0 +1,262 @@
+meta {
+  name: Upload a file
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/files.upload
+  body: formUrlEncoded
+  auth: oauth2
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: files:read files:write:user remote_files:read remote_files:write remote_files:share
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+body:form-urlencoded {
+  token: 
+  file: 
+  content: 
+  filetype: 
+  filename: 
+  title: 
+  initial_comment: 
+  channels: 
+  thread_ts: 
+}
+
+example {
+  name: Example of a successful files.upload response (Example request to upload a file)
+  
+  request: {
+    url: {{baseUrl}}/files.upload
+    method: POST
+    mode: formUrlEncoded
+    body:form-urlencoded: {
+      token: 
+      file: 
+      content: 
+      filetype: 
+      filename: 
+      title: 
+      initial_comment: 
+      channels: 
+      thread_ts: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "file": {
+            "Id": "F0TD00400",
+            "Name": "dramacat.gif",
+            "Title": "dramacat",
+            "Mimetype": "image/jpeg",
+            "Filetype": "gif",
+            "PrettyType": "JPEG",
+            "User": "U0L4B9NSU",
+            "Mode": "hosted",
+            "Editable": false,
+            "IsExternal": false,
+            "IsPublic": false,
+            "IsStarred": false,
+            "PublicUrlShared": false,
+            "Size": 43518,
+            "Created": 1532293501,
+            "Timestamp": 1532293501,
+            "OriginalH": 366,
+            "OriginalW": 526,
+            "HasRichPreview": false,
+            "CommentsCount": 0,
+            "Channels": [],
+            "Groups": [],
+            "Ims": [
+              "D0L4B9P0Q"
+            ]
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example of a successful files.upload response (Example request to upload a file)
+  
+  request: {
+    url: {{baseUrl}}/files.upload
+    method: POST
+    mode: multipartForm
+    body:form-urlencoded: {
+      token: 
+      file: 
+      content: 
+      filetype: 
+      filename: 
+      title: 
+      initial_comment: 
+      channels: 
+      thread_ts: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "file": {
+            "Id": "F0TD00400",
+            "Name": "dramacat.gif",
+            "Title": "dramacat",
+            "Mimetype": "image/jpeg",
+            "Filetype": "gif",
+            "PrettyType": "JPEG",
+            "User": "U0L4B9NSU",
+            "Mode": "hosted",
+            "Editable": false,
+            "IsExternal": false,
+            "IsPublic": false,
+            "IsStarred": false,
+            "PublicUrlShared": false,
+            "Size": 43518,
+            "Created": 1532293501,
+            "Timestamp": 1532293501,
+            "OriginalH": 366,
+            "OriginalW": 526,
+            "HasRichPreview": false,
+            "CommentsCount": 0,
+            "Channels": [],
+            "Groups": [],
+            "Ims": [
+              "D0L4B9P0Q"
+            ]
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example error response for files.upload (Example request to upload a file)
+  
+  request: {
+    url: {{baseUrl}}/files.upload
+    method: POST
+    mode: formUrlEncoded
+    body:form-urlencoded: {
+      token: 
+      file: 
+      content: 
+      filetype: 
+      filename: 
+      title: 
+      initial_comment: 
+      channels: 
+      thread_ts: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example error response for files.upload (Example request to upload a file)
+  
+  request: {
+    url: {{baseUrl}}/files.upload
+    method: POST
+    mode: multipartForm
+    body:form-urlencoded: {
+      token: 
+      file: 
+      content: 
+      filetype: 
+      filename: 
+      title: 
+      initial_comment: 
+      channels: 
+      thread_ts: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

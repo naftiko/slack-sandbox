@@ -1,0 +1,284 @@
+meta {
+  name: Send a message
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/chat.postMessage
+  body: json
+  auth: oauth2
+}
+
+headers {
+  token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: chat:write:user chat:write:bot links:write none
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+body:json {
+  {
+    "channel": "",
+    "text": "",
+    "as_user": "",
+    "attachments": "",
+    "blocks": "",
+    "icon_emoji": "",
+    "icon_url": "",
+    "link_names": false,
+    "mrkdwn": false,
+    "parse": "",
+    "reply_broadcast": false,
+    "thread_ts": "",
+    "unfurl_links": false,
+    "unfurl_media": false,
+    "username": ""
+  }
+}
+
+example {
+  name: Example of a successful chat.postMessage response (Example request to send a message)
+  
+  request: {
+    url: {{baseUrl}}/chat.postMessage
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C1H9RESGL",
+        "text": "Hello, world!",
+        "as_user": "false",
+        "mrkdwn": true,
+        "unfurl_links": true,
+        "unfurl_media": true
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "channel": "C1H9RESGL",
+          "ts": "1503435956.000247",
+          "message": {
+            "Type": "message",
+            "Subtype": "bot_message",
+            "Text": "Here's a message for you",
+            "Ts": "1503435956.000247",
+            "Username": "ecto1",
+            "BotId": "B19LU7CSY",
+            "Attachments": [
+              {
+                "Id": 1,
+                "Fallback": "This is an attachment's fallback",
+                "Text": "This is an attachment"
+              }
+            ]
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example of a successful chat.postMessage response (Example request to send a message)
+  
+  request: {
+    url: {{baseUrl}}/chat.postMessage
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "",
+        "text": "",
+        "as_user": "",
+        "attachments": "",
+        "blocks": "",
+        "icon_emoji": "",
+        "icon_url": "",
+        "link_names": false,
+        "mrkdwn": false,
+        "parse": "",
+        "reply_broadcast": false,
+        "thread_ts": "",
+        "unfurl_links": false,
+        "unfurl_media": false,
+        "username": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "channel": "C1H9RESGL",
+          "ts": "1503435956.000247",
+          "message": {
+            "Type": "message",
+            "Subtype": "bot_message",
+            "Text": "Here's a message for you",
+            "Ts": "1503435956.000247",
+            "Username": "ecto1",
+            "BotId": "B19LU7CSY",
+            "Attachments": [
+              {
+                "Id": 1,
+                "Fallback": "This is an attachment's fallback",
+                "Text": "This is an attachment"
+              }
+            ]
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example of an error response for chat.postMessage (Example request to send a message)
+  
+  request: {
+    url: {{baseUrl}}/chat.postMessage
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C1H9RESGL",
+        "text": "Hello, world!",
+        "as_user": "false",
+        "mrkdwn": true,
+        "unfurl_links": true,
+        "unfurl_media": true
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "too_many_attachments"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example of an error response for chat.postMessage (Example request to send a message)
+  
+  request: {
+    url: {{baseUrl}}/chat.postMessage
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "",
+        "text": "",
+        "as_user": "",
+        "attachments": "",
+        "blocks": "",
+        "icon_emoji": "",
+        "icon_url": "",
+        "link_names": false,
+        "mrkdwn": false,
+        "parse": "",
+        "reply_broadcast": false,
+        "thread_ts": "",
+        "unfurl_links": false,
+        "unfurl_media": false,
+        "username": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "too_many_attachments"
+        }
+      '''
+    }
+  }
+}

@@ -1,0 +1,133 @@
+meta {
+  name: List Event Authorizations
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/apps.event.authorizations.list
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  event_context: 
+  ~cursor: 
+  ~limit: 
+}
+
+headers {
+  token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: none authorizations:read
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful event authorizations list response
+  
+  request: {
+    url: {{baseUrl}}/apps.event.authorizations.list
+    method: GET
+    mode: none
+    params:query: {
+      event_context: 
+      ~cursor: 
+      ~limit: 
+    }
+  
+    headers: {
+      token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "authorizations": [
+            {
+              "enterprise_id": "E1234A12AB",
+              "team_id": "T1234A12AB",
+              "user_id": "U1234A12AB",
+              "is_bot": true
+            },
+            {
+              "enterprise_id": "E1234A12AB",
+              "team_id": "T5678B56BC",
+              "user_id": "U5678B56BC",
+              "is_bot": false
+            }
+          ]
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Invalid authentication error
+  
+  request: {
+    url: {{baseUrl}}/apps.event.authorizations.list
+    method: GET
+    mode: none
+    params:query: {
+      event_context: 
+      ~cursor: 
+      ~limit: 
+    }
+  
+    headers: {
+      token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

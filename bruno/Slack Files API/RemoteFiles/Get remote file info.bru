@@ -1,0 +1,116 @@
+meta {
+  name: Get remote file info
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/files.remote.info
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  ~token: 
+  ~file: 
+  ~external_id: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: files:read files:write:user remote_files:read remote_files:write remote_files:share
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Example of a successful files.remote.info response
+  
+  request: {
+    url: {{baseUrl}}/files.remote.info
+    method: GET
+    mode: none
+    params:query: {
+      ~token: 
+      ~file: 
+      ~external_id: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "file": {
+            "Id": "F0S43PZDF",
+            "ExternalId": "ext-file-12345",
+            "Title": "Project Documentation",
+            "ExternalUrl": "https://example.com/docs/project.pdf",
+            "Filetype": "pdf",
+            "Mimetype": "application/pdf",
+            "Created": 1531763342
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example error response for files.remote operations
+  
+  request: {
+    url: {{baseUrl}}/files.remote.info
+    method: GET
+    mode: none
+    params:query: {
+      ~token: 
+      ~file: 
+      ~external_id: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

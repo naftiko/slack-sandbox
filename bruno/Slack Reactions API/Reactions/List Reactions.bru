@@ -1,0 +1,168 @@
+meta {
+  name: List Reactions
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/reactions.list
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  token: 
+  ~user: 
+  ~full: 
+  ~count: 
+  ~page: 
+  ~cursor: 
+  ~limit: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: reactions:read reactions:write
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful list of reactions
+  
+  request: {
+    url: {{baseUrl}}/reactions.list
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~user: 
+      ~full: 
+      ~count: 
+      ~page: 
+      ~cursor: 
+      ~limit: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "items": [
+            {
+              "type": "message",
+              "channel": "C3UKJTQAC",
+              "message": {
+                "bot_id": "B4VLRLMKJ",
+                "text": "Hello from Python! :tada:",
+                "ts": "1507849573.000090",
+                "username": "Shipit Notifications",
+                "subtype": "bot_message",
+                "reactions": [
+                  {
+                    "name": "robot_face",
+                    "count": 1,
+                    "users": [
+                      "U2U85N1RV"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "file",
+              "file": {
+                "id": "F7H0D7ZA4",
+                "name": "computer.gif",
+                "title": "computer.gif",
+                "user": "U2U85N1RV",
+                "username": "",
+                "created": 1507850315,
+                "channels": [
+                  "C2U7V2YA2"
+                ],
+                "comments_count": 1,
+                "reactions": [
+                  {
+                    "name": "stuck_out_tongue_winking_eye",
+                    "count": 1,
+                    "users": [
+                      "U2U85N1RV"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "response_metadata": {
+            "next_cursor": "dGVhbTpDMUg5UkVTR0w="
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Authentication error
+  
+  request: {
+    url: {{baseUrl}}/reactions.list
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~user: 
+      ~full: 
+      ~count: 
+      ~page: 
+      ~cursor: 
+      ~limit: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

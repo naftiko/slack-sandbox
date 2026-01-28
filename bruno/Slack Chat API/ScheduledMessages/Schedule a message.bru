@@ -1,0 +1,271 @@
+meta {
+  name: Schedule a message
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/chat.scheduleMessage
+  body: json
+  auth: oauth2
+}
+
+headers {
+  ~token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: chat:write:user chat:write:bot links:write none
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+body:json {
+  {
+    "channel": "",
+    "text": "",
+    "post_at": "",
+    "as_user": false,
+    "attachments": "",
+    "blocks": "",
+    "link_names": false,
+    "parse": "",
+    "reply_broadcast": false,
+    "thread_ts": 0,
+    "unfurl_links": false,
+    "unfurl_media": false
+  }
+}
+
+example {
+  name: Example of a successful chat.scheduleMessage response (Example request to schedule a message)
+  
+  request: {
+    url: {{baseUrl}}/chat.scheduleMessage
+    method: POST
+    mode: json
+    headers: {
+      ~token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C1H9RESGL",
+        "text": "Here's a message for you in the future",
+        "post_at": "1562180400",
+        "as_user": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "channel": "C1H9RESGL",
+          "scheduled_message_id": "Q1298393284",
+          "post_at": 1562180400,
+          "message": {
+            "Type": "delayed_message",
+            "Subtype": "bot_message",
+            "Text": "Here's a message for you in the future",
+            "Username": "ecto1",
+            "BotId": "B19LU7CSY",
+            "Attachments": [
+              {
+                "Id": 1,
+                "Fallback": "This is an attachment's fallback",
+                "Text": "This is an attachment"
+              }
+            ]
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example of a successful chat.scheduleMessage response (Example request to schedule a message)
+  
+  request: {
+    url: {{baseUrl}}/chat.scheduleMessage
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      ~token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "",
+        "text": "",
+        "post_at": "",
+        "as_user": false,
+        "attachments": "",
+        "blocks": "",
+        "link_names": false,
+        "parse": "",
+        "reply_broadcast": false,
+        "thread_ts": 0,
+        "unfurl_links": false,
+        "unfurl_media": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "channel": "C1H9RESGL",
+          "scheduled_message_id": "Q1298393284",
+          "post_at": 1562180400,
+          "message": {
+            "Type": "delayed_message",
+            "Subtype": "bot_message",
+            "Text": "Here's a message for you in the future",
+            "Username": "ecto1",
+            "BotId": "B19LU7CSY",
+            "Attachments": [
+              {
+                "Id": 1,
+                "Fallback": "This is an attachment's fallback",
+                "Text": "This is an attachment"
+              }
+            ]
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example of an error response for chat.scheduleMessage (Example request to schedule a message)
+  
+  request: {
+    url: {{baseUrl}}/chat.scheduleMessage
+    method: POST
+    mode: json
+    headers: {
+      ~token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C1H9RESGL",
+        "text": "Here's a message for you in the future",
+        "post_at": "1562180400",
+        "as_user": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "time_in_past"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example of an error response for chat.scheduleMessage (Example request to schedule a message)
+  
+  request: {
+    url: {{baseUrl}}/chat.scheduleMessage
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      ~token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "",
+        "text": "",
+        "post_at": "",
+        "as_user": false,
+        "attachments": "",
+        "blocks": "",
+        "link_names": false,
+        "parse": "",
+        "reply_broadcast": false,
+        "thread_ts": 0,
+        "unfurl_links": false,
+        "unfurl_media": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "time_in_past"
+        }
+      '''
+    }
+  }
+}

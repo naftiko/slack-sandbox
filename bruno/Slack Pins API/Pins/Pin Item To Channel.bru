@@ -1,0 +1,820 @@
+meta {
+  name: Pin Item To Channel
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/pins.add
+  body: formUrlEncoded
+  auth: oauth2
+}
+
+headers {
+  token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: pins:read pins:write
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+body:form-urlencoded {
+  channel: 
+  timestamp: 
+}
+
+example {
+  name: Successful pin operation (Pin a message to a channel)
+  description: Response when a pin is successfully added or removed
+  
+  request: {
+    url: {{baseUrl}}/pins.add
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:form-urlencoded: {
+      channel: 
+      timestamp: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Successful pin operation (Pin a message to a channel)
+  description: Response when a pin is successfully added or removed
+  
+  request: {
+    url: {{baseUrl}}/pins.add
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C1234567890",
+        "timestamp": "1508197641.000151"
+      }
+    }
+  
+    body:form-urlencoded: {
+      channel: 
+      timestamp: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Bad timestamp error (Pin a message to a channel)
+  description: Error when the provided timestamp is invalid
+  
+  request: {
+    url: {{baseUrl}}/pins.add
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:form-urlencoded: {
+      channel: 
+      timestamp: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 400
+      text: Bad Request
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "bad_timestamp"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Bad timestamp error (Pin a message to a channel)
+  description: Error when the provided timestamp is invalid
+  
+  request: {
+    url: {{baseUrl}}/pins.add
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C1234567890",
+        "timestamp": "1508197641.000151"
+      }
+    }
+  
+    body:form-urlencoded: {
+      channel: 
+      timestamp: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 400
+      text: Bad Request
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "bad_timestamp"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: No item specified error (Pin a message to a channel)
+  description: Error when no item (timestamp) is provided to pin/unpin
+  
+  request: {
+    url: {{baseUrl}}/pins.add
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:form-urlencoded: {
+      channel: 
+      timestamp: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 400
+      text: Bad Request
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "no_item_specified"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: No item specified error (Pin a message to a channel)
+  description: Error when no item (timestamp) is provided to pin/unpin
+  
+  request: {
+    url: {{baseUrl}}/pins.add
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C1234567890",
+        "timestamp": "1508197641.000151"
+      }
+    }
+  
+    body:form-urlencoded: {
+      channel: 
+      timestamp: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 400
+      text: Bad Request
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "no_item_specified"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Not authenticated error (Pin a message to a channel)
+  description: Error when no authentication token is provided
+  
+  request: {
+    url: {{baseUrl}}/pins.add
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:form-urlencoded: {
+      channel: 
+      timestamp: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 401
+      text: Unauthorized
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "not_authed"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Not authenticated error (Pin a message to a channel)
+  description: Error when no authentication token is provided
+  
+  request: {
+    url: {{baseUrl}}/pins.add
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C1234567890",
+        "timestamp": "1508197641.000151"
+      }
+    }
+  
+    body:form-urlencoded: {
+      channel: 
+      timestamp: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 401
+      text: Unauthorized
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "not_authed"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Permission denied error (Pin a message to a channel)
+  description: Error when the user lacks permission to pin/unpin in the channel
+  
+  request: {
+    url: {{baseUrl}}/pins.add
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:form-urlencoded: {
+      channel: 
+      timestamp: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 403
+      text: Forbidden
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "permission_denied"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Permission denied error (Pin a message to a channel)
+  description: Error when the user lacks permission to pin/unpin in the channel
+  
+  request: {
+    url: {{baseUrl}}/pins.add
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C1234567890",
+        "timestamp": "1508197641.000151"
+      }
+    }
+  
+    body:form-urlencoded: {
+      channel: 
+      timestamp: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 403
+      text: Forbidden
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "permission_denied"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Channel not found error (Pin a message to a channel)
+  description: Error when the specified channel does not exist
+  
+  request: {
+    url: {{baseUrl}}/pins.add
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:form-urlencoded: {
+      channel: 
+      timestamp: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 404
+      text: Not Found
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "channel_not_found"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Channel not found error (Pin a message to a channel)
+  description: Error when the specified channel does not exist
+  
+  request: {
+    url: {{baseUrl}}/pins.add
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C1234567890",
+        "timestamp": "1508197641.000151"
+      }
+    }
+  
+    body:form-urlencoded: {
+      channel: 
+      timestamp: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 404
+      text: Not Found
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "channel_not_found"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Message not found error (Pin a message to a channel)
+  description: Error when the specified message does not exist
+  
+  request: {
+    url: {{baseUrl}}/pins.add
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:form-urlencoded: {
+      channel: 
+      timestamp: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 404
+      text: Not Found
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "message_not_found"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Message not found error (Pin a message to a channel)
+  description: Error when the specified message does not exist
+  
+  request: {
+    url: {{baseUrl}}/pins.add
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C1234567890",
+        "timestamp": "1508197641.000151"
+      }
+    }
+  
+    body:form-urlencoded: {
+      channel: 
+      timestamp: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 404
+      text: Not Found
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "message_not_found"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Already pinned error (Pin a message to a channel)
+  description: Error when attempting to pin an item that is already pinned
+  
+  request: {
+    url: {{baseUrl}}/pins.add
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:form-urlencoded: {
+      channel: 
+      timestamp: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 409
+      text: Conflict
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "already_pinned"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Already pinned error (Pin a message to a channel)
+  description: Error when attempting to pin an item that is already pinned
+  
+  request: {
+    url: {{baseUrl}}/pins.add
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C1234567890",
+        "timestamp": "1508197641.000151"
+      }
+    }
+  
+    body:form-urlencoded: {
+      channel: 
+      timestamp: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 409
+      text: Conflict
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "already_pinned"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Generic pin error (Pin a message to a channel)
+  description: Unexpected error during pin operation
+  
+  request: {
+    url: {{baseUrl}}/pins.add
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:form-urlencoded: {
+      channel: 
+      timestamp: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "request_timeout"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Generic pin error (Pin a message to a channel)
+  description: Unexpected error during pin operation
+  
+  request: {
+    url: {{baseUrl}}/pins.add
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C1234567890",
+        "timestamp": "1508197641.000151"
+      }
+    }
+  
+    body:form-urlencoded: {
+      channel: 
+      timestamp: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "request_timeout"
+        }
+      '''
+    }
+  }
+}

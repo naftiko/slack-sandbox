@@ -1,0 +1,237 @@
+meta {
+  name: Update a message
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/chat.update
+  body: json
+  auth: oauth2
+}
+
+headers {
+  token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: chat:write:user chat:write:bot links:write none
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+body:json {
+  {
+    "channel": "",
+    "ts": "",
+    "text": "",
+    "as_user": "",
+    "attachments": "",
+    "blocks": "",
+    "link_names": "",
+    "parse": ""
+  }
+}
+
+example {
+  name: Example of a successful chat.update response (Example request to update a message)
+  
+  request: {
+    url: {{baseUrl}}/chat.update
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C024BE91L",
+        "ts": "1401383885.000061",
+        "text": "Updated text you carefully authored"
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "channel": "C024BE91L",
+          "ts": "1401383885.000061",
+          "text": "Updated text you carefully authored",
+          "message": {
+            "text": "Updated text you carefully authored",
+            "user": "U34567890"
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example of a successful chat.update response (Example request to update a message)
+  
+  request: {
+    url: {{baseUrl}}/chat.update
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "",
+        "ts": "",
+        "text": "",
+        "as_user": "",
+        "attachments": "",
+        "blocks": "",
+        "link_names": "",
+        "parse": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "channel": "C024BE91L",
+          "ts": "1401383885.000061",
+          "text": "Updated text you carefully authored",
+          "message": {
+            "text": "Updated text you carefully authored",
+            "user": "U34567890"
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example of an error response for chat.update (Example request to update a message)
+  
+  request: {
+    url: {{baseUrl}}/chat.update
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C024BE91L",
+        "ts": "1401383885.000061",
+        "text": "Updated text you carefully authored"
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "cant_update_message"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example of an error response for chat.update (Example request to update a message)
+  
+  request: {
+    url: {{baseUrl}}/chat.update
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "",
+        "ts": "",
+        "text": "",
+        "as_user": "",
+        "attachments": "",
+        "blocks": "",
+        "link_names": "",
+        "parse": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "cant_update_message"
+        }
+      '''
+    }
+  }
+}

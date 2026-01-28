@@ -1,0 +1,257 @@
+meta {
+  name: Disable User Group
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/Use Groups.disable
+  body: formUrlEncoded
+  auth: oauth2
+}
+
+headers {
+  token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: Use Groups:read Use Groups:write
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+body:form-urlencoded {
+  usergroup: 
+  include_count: 
+}
+
+example {
+  name: Successful disabled user group response (Disable or enable a user group)
+  
+  request: {
+    url: {{baseUrl}}/Use Groups.disable
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:form-urlencoded: {
+      usergroup: 
+      include_count: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "usergroup": {
+            "id": "S0616NG6M",
+            "team_id": "T060R4BHN",
+            "is_usergroup": true,
+            "is_external": false,
+            "name": "Marketing Team",
+            "description": "Marketing gurus, PR experts and product advocates.",
+            "handle": "marketing-team",
+            "date_create": 1447096577,
+            "date_update": 1447102109,
+            "date_delete": 1447102200,
+            "auto_type": null,
+            "created_by": "U060R4BJ4",
+            "updated_by": "U060R4BJ4",
+            "deleted_by": "U060R4BJ4",
+            "prefs": {
+              "channels": [],
+              "groups": []
+            },
+            "user_count": 2,
+            "users": [
+              "U060R4BJ4",
+              "U060RNRCZ"
+            ]
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Successful disabled user group response (Disable or enable a user group)
+  
+  request: {
+    url: {{baseUrl}}/Use Groups.disable
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "usergroup": "S0616NG6M",
+        "include_count": true
+      }
+    }
+  
+    body:form-urlencoded: {
+      usergroup: 
+      include_count: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "usergroup": {
+            "id": "S0616NG6M",
+            "team_id": "T060R4BHN",
+            "is_usergroup": true,
+            "is_external": false,
+            "name": "Marketing Team",
+            "description": "Marketing gurus, PR experts and product advocates.",
+            "handle": "marketing-team",
+            "date_create": 1447096577,
+            "date_update": 1447102109,
+            "date_delete": 1447102200,
+            "auto_type": null,
+            "created_by": "U060R4BJ4",
+            "updated_by": "U060R4BJ4",
+            "deleted_by": "U060R4BJ4",
+            "prefs": {
+              "channels": [],
+              "groups": []
+            },
+            "user_count": 2,
+            "users": [
+              "U060R4BJ4",
+              "U060RNRCZ"
+            ]
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Error response (Disable or enable a user group)
+  
+  request: {
+    url: {{baseUrl}}/Use Groups.disable
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:form-urlencoded: {
+      usergroup: 
+      include_count: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Error response (Disable or enable a user group)
+  
+  request: {
+    url: {{baseUrl}}/Use Groups.disable
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "usergroup": "S0616NG6M",
+        "include_count": true
+      }
+    }
+  
+    body:form-urlencoded: {
+      usergroup: 
+      include_count: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

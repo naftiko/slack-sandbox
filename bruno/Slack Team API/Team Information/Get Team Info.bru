@@ -1,0 +1,121 @@
+meta {
+  name: Get Team Info
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/team.info
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  token: 
+  ~team: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: admin team:read users.profile:read
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful team info response
+  
+  request: {
+    url: {{baseUrl}}/team.info
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~team: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "team": {
+            "id": "T12345",
+            "name": "My Team",
+            "domain": "example",
+            "email_domain": "example.com",
+            "enterprise_id": "E1234A12AB",
+            "enterprise_name": "Umbrella Corporation",
+            "icon": {
+              "image_34": "https://...",
+              "image_44": "https://...",
+              "image_68": "https://...",
+              "image_88": "https://...",
+              "image_102": "https://...",
+              "image_132": "https://...",
+              "image_default": true
+            }
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Error response for invalid auth
+  
+  request: {
+    url: {{baseUrl}}/team.info
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~team: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

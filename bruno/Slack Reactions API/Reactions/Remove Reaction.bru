@@ -1,0 +1,127 @@
+meta {
+  name: Remove Reaction
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/reactions.remove
+  body: json
+  auth: oauth2
+}
+
+headers {
+  token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: reactions:read reactions:write
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+body:json {
+  {
+    "name": "",
+    "file": "",
+    "file_comment": "",
+    "channel": "",
+    "timestamp": ""
+  }
+}
+
+example {
+  name: Successful reaction removed (Remove thumbsup reaction from a message)
+  
+  request: {
+    url: {{baseUrl}}/reactions.remove
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "name": "thumbsup",
+        "channel": "C1234567890",
+        "timestamp": "1234567890.123456"
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: No reaction to remove (Remove thumbsup reaction from a message)
+  
+  request: {
+    url: {{baseUrl}}/reactions.remove
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "name": "thumbsup",
+        "channel": "C1234567890",
+        "timestamp": "1234567890.123456"
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "no_reaction"
+        }
+      '''
+    }
+  }
+}

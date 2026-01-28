@@ -1,0 +1,114 @@
+meta {
+  name: List Workspace Admins
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/admin.teams.admins.list
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  token: 
+  team_id: 
+  ~limit: 
+  ~cursor: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: admin.apps:read admin.apps:write admin.conversations:read admin.conversations:write admin.invites:read admin.invites:write admin.teams:read admin.teams:write admin.Use Groups:read admin.Use Groups:write admin.users:read admin.users:write
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful admins list response
+  
+  request: {
+    url: {{baseUrl}}/admin.teams.admins.list
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~limit: 
+      ~cursor: 
+      team_id: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "admin_ids": [
+            "U1234",
+            "U5678"
+          ]
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Invalid authentication error
+  
+  request: {
+    url: {{baseUrl}}/admin.teams.admins.list
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~limit: 
+      ~cursor: 
+      team_id: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

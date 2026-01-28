@@ -1,0 +1,152 @@
+meta {
+  name: Get App Permissions Info
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/apps.permissions.info
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  ~token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: none authorizations:read
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful permissions info response
+  
+  request: {
+    url: {{baseUrl}}/apps.permissions.info
+    method: GET
+    mode: none
+    params:query: {
+      ~token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "info": {
+            "app_home": {
+              "resources": {
+                "ids": [
+                  "D0C0NU1Q8",
+                  "D0BH95DLH"
+                ]
+              },
+              "scopes": [
+                "chat:write",
+                "im:history",
+                "im:read"
+              ]
+            },
+            "channel": {
+              "resources": {
+                "excluded_ids": [],
+                "ids": [
+                  "C061FA5PB"
+                ],
+                "wildcard": false
+              },
+              "scopes": [
+                "channels:read"
+              ]
+            },
+            "group": {
+              "resources": {
+                "ids": []
+              },
+              "scopes": []
+            },
+            "im": {
+              "resources": {
+                "ids": []
+              },
+              "scopes": []
+            },
+            "mpim": {
+              "resources": {
+                "ids": []
+              },
+              "scopes": []
+            },
+            "team": {
+              "resources": {
+                "ids": []
+              },
+              "scopes": []
+            }
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Invalid authentication error
+  
+  request: {
+    url: {{baseUrl}}/apps.permissions.info
+    method: GET
+    mode: none
+    params:query: {
+      ~token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

@@ -1,0 +1,155 @@
+meta {
+  name: Get thread replies
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/conversations.replies
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  ~token: 
+  ~channel: 
+  ~ts: 
+  ~latest: 
+  ~oldest: 
+  ~inclusive: 
+  ~limit: 
+  ~cursor: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: channels:read channels:write channels:history groups:read groups:write groups:history im:read im:write im:history mpim:read mpim:write mpim:history
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Example of a successful replies response
+  
+  request: {
+    url: {{baseUrl}}/conversations.replies
+    method: GET
+    mode: none
+    params:query: {
+      ~token: 
+      ~channel: 
+      ~ts: 
+      ~latest: 
+      ~oldest: 
+      ~inclusive: 
+      ~limit: 
+      ~cursor: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "messages": [
+            {
+              "Type": "message",
+              "User": "U061F7AUR",
+              "Text": "island",
+              "Ts": "1482960137.003543",
+              "ThreadTs": "1482960137.003543",
+              "ReplyCount": 3,
+              "Subscribed": true,
+              "LastRead": "1484678597.521003",
+              "UnreadCount": 0
+            },
+            {
+              "Type": "message",
+              "User": "U061F7AUR",
+              "Text": "one island",
+              "Ts": "1483037603.017503",
+              "ThreadTs": "1482960137.003543",
+              "ParentUserId": "U061F7AUR"
+            },
+            {
+              "Type": "message",
+              "User": "U061F7AUR",
+              "Text": "two island",
+              "Ts": "1483051909.018632",
+              "ThreadTs": "1482960137.003543",
+              "ParentUserId": "U061F7AUR"
+            }
+          ],
+          "has_more": true,
+          "response_metadata": {
+            "NextCursor": "bmV4dF90czoxNDg0Njc4MjkwNTE3MDkx"
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example error response for replies
+  
+  request: {
+    url: {{baseUrl}}/conversations.replies
+    method: GET
+    mode: none
+    params:query: {
+      ~token: 
+      ~channel: 
+      ~ts: 
+      ~latest: 
+      ~oldest: 
+      ~inclusive: 
+      ~limit: 
+      ~cursor: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "thread_not_found"
+        }
+      '''
+    }
+  }
+}

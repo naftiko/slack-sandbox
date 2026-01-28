@@ -1,0 +1,137 @@
+meta {
+  name: List remote files
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/files.remote.list
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  ~token: 
+  ~channel: 
+  ~ts_from: 
+  ~ts_to: 
+  ~limit: 
+  ~cursor: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: files:read files:write:user remote_files:read remote_files:write remote_files:share
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Example of a successful files.remote.list response
+  
+  request: {
+    url: {{baseUrl}}/files.remote.list
+    method: GET
+    mode: none
+    params:query: {
+      ~token: 
+      ~channel: 
+      ~ts_from: 
+      ~ts_to: 
+      ~limit: 
+      ~cursor: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "files": [
+            {
+              "Id": "F0S43PZDF",
+              "ExternalId": "ext-file-12345",
+              "Title": "Project Documentation",
+              "ExternalUrl": "https://example.com/docs/project.pdf",
+              "Filetype": "pdf",
+              "Created": 1531763342
+            },
+            {
+              "Id": "F0S43P1CZ",
+              "ExternalId": "ext-file-67890",
+              "Title": "Design Mockups",
+              "ExternalUrl": "https://example.com/design/mockups.png",
+              "Filetype": "png",
+              "Created": 1531763254
+            }
+          ],
+          "response_metadata": {
+            "NextCursor": "dGVhbTpDMUg5UkVTR0w="
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example error response for files.remote operations
+  
+  request: {
+    url: {{baseUrl}}/files.remote.list
+    method: GET
+    mode: none
+    params:query: {
+      ~token: 
+      ~channel: 
+      ~ts_from: 
+      ~ts_to: 
+      ~limit: 
+      ~cursor: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

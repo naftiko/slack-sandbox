@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Slack Admin API",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

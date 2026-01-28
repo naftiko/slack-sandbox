@@ -1,0 +1,217 @@
+meta {
+  name: Rename a conversation
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/conversations.rename
+  body: json
+  auth: oauth2
+}
+
+headers {
+  ~token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: channels:read channels:write channels:history groups:read groups:write groups:history im:read im:write im:history mpim:read mpim:write mpim:history
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+body:json {
+  {
+    "channel": "",
+    "name": ""
+  }
+}
+
+example {
+  name: Example of a successful rename response (Example request to rename a conversation)
+  
+  request: {
+    url: {{baseUrl}}/conversations.rename
+    method: POST
+    mode: json
+    headers: {
+      ~token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C012AB3CD",
+        "name": "new-channel-name"
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "channel": {
+            "Id": "C012AB3CD",
+            "Name": "new-channel-name",
+            "NameNormalized": "new-channel-name",
+            "IsChannel": true,
+            "IsMember": true
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example of a successful rename response (Example request to rename a conversation)
+  
+  request: {
+    url: {{baseUrl}}/conversations.rename
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      ~token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "",
+        "name": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "channel": {
+            "Id": "C012AB3CD",
+            "Name": "new-channel-name",
+            "NameNormalized": "new-channel-name",
+            "IsChannel": true,
+            "IsMember": true
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example error response for rename (Example request to rename a conversation)
+  
+  request: {
+    url: {{baseUrl}}/conversations.rename
+    method: POST
+    mode: json
+    headers: {
+      ~token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "C012AB3CD",
+        "name": "new-channel-name"
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "not_in_channel"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example error response for rename (Example request to rename a conversation)
+  
+  request: {
+    url: {{baseUrl}}/conversations.rename
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      ~token: 
+    }
+  
+    body:json: {
+      {
+        "channel": "",
+        "name": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "not_in_channel"
+        }
+      '''
+    }
+  }
+}

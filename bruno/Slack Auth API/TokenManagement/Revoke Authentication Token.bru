@@ -1,0 +1,140 @@
+meta {
+  name: Revoke Authentication Token
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/auth.revoke
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  token: 
+  ~test: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: none
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful token revocation
+  
+  request: {
+    url: {{baseUrl}}/auth.revoke
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~test: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "revoked": true
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Test mode response (token not actually revoked)
+  
+  request: {
+    url: {{baseUrl}}/auth.revoke
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~test: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "revoked": false
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Invalid authentication error
+  
+  request: {
+    url: {{baseUrl}}/auth.revoke
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~test: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

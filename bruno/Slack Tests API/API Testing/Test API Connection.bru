@@ -1,0 +1,147 @@
+meta {
+  name: Test API Connection
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api.test
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  ~error: 
+  ~foo: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: none
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful API test response
+  description: Standard success response when no parameters are provided
+  
+  request: {
+    url: {{baseUrl}}/api.test
+    method: GET
+    mode: none
+    params:query: {
+      ~error: 
+      ~foo: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Successful response with echoed arguments
+  description: Success response showing how foo parameter is echoed back
+  
+  request: {
+    url: {{baseUrl}}/api.test
+    method: GET
+    mode: none
+    params:query: {
+      ~error: 
+      ~foo: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "args": {
+            "foo": "bar"
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Error response for testing
+  description: Error response when the error parameter is provided
+  
+  request: {
+    url: {{baseUrl}}/api.test
+    method: GET
+    mode: none
+    params:query: {
+      ~error: 
+      ~foo: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "my_error",
+          "args": {
+            "error": "my_error"
+          }
+        }
+      '''
+    }
+  }
+}

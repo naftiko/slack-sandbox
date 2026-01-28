@@ -1,0 +1,164 @@
+meta {
+  name: List App Requests
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/admin.apps.requests.list
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  token: 
+  ~limit: 
+  ~cursor: 
+  ~team_id: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: admin.apps:read admin.apps:write admin.conversations:read admin.conversations:write admin.invites:read admin.invites:write admin.teams:read admin.teams:write admin.Use Groups:read admin.Use Groups:write admin.users:read admin.users:write
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful app requests list response
+  
+  request: {
+    url: {{baseUrl}}/admin.apps.requests.list
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~limit: 
+      ~cursor: 
+      ~team_id: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "app_requests": [
+            {
+              "id": "Ar0XJGFLMLS",
+              "app": {
+                "id": "A061BL8RQ0",
+                "name": "Test App",
+                "description": "",
+                "help_url": "",
+                "privacy_policy_url": "https://testapp.com/privacy",
+                "app_homepage_url": "",
+                "app_directory_url": "https://acmecorp.slack.com/apps/A061BL8RQ0-test-app",
+                "is_app_directory_approved": true,
+                "is_internal": false,
+                "additional_info": "",
+                "icons": {
+                  "image_32": "/cdn/157658203/img/testapp/service_32.png",
+                  "image_48": "/cdn/157658203/img/testapp/service_48.png",
+                  "image_64": "/cdn/157658203/img/testapp/service_64.png",
+                  "image_72": "/cdn/157658203/img/testapp/service_72.png",
+                  "image_96": "/cdn/157658203/img/testapp/service_96.png",
+                  "image_128": "/cdn/157258203/img/testapp/service_128.png",
+                  "image_192": "/cdn/157258203/img/testapp/service_192.png",
+                  "image_512": "/cdn/15758203/img/testapp/service_512.png",
+                  "image_1024": "/cdn/15258203/img/testapp/service_1024.png"
+                }
+              },
+              "user": {
+                "id": "W08RA9G5HR",
+                "name": "Jane Doe",
+                "email": "janedoe@example.com"
+              },
+              "team": {
+                "id": "T0M94LNUCR",
+                "name": "Acme Corp",
+                "domain": "acmecorp"
+              },
+              "scopes": [
+                {
+                  "name": "incoming-webhook",
+                  "description": "Post messages to specific channels in Slack",
+                  "is_sensitive": false,
+                  "token_type": "user"
+                }
+              ],
+              "message": "test test again",
+              "date_created": 1578956327,
+              "previous_resolution": null
+            }
+          ],
+          "response_metadata": {
+            "next_cursor": ""
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Missing scope error
+  
+  request: {
+    url: {{baseUrl}}/admin.apps.requests.list
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~limit: 
+      ~cursor: 
+      ~team_id: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "missing_scope",
+          "needed": "admin.apps:read",
+          "provided": "read,client,admin,identify,post,apps"
+        }
+      '''
+    }
+  }
+}

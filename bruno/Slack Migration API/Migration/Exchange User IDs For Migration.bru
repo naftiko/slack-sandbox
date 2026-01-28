@@ -1,0 +1,238 @@
+meta {
+  name: Exchange User IDs For Migration
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/migration.exchange
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  token: 
+  users: 
+  ~team_id: 
+  ~to_old: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: tokens.basic
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful user ID mapping response
+  description: Example response when user IDs are successfully mapped from workspace-scoped to global IDs
+  
+  request: {
+    url: {{baseUrl}}/migration.exchange
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      users: 
+      ~team_id: 
+      ~to_old: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "enterprise_id": "E1KQTNXE1",
+          "team_id": "T1KR7PE1W",
+          "user_id_map": {
+            "U06UBSUN5": "W06M56XJM",
+            "U06UBSVB3": "W06PUUDLY",
+            "U06UBSVDX": "W06PUUDMW",
+            "U06UEB62U": "W06PTT6GH",
+            "W06UAZ65Q": "W06UAZ65Q"
+          },
+          "invalid_user_ids": [
+            "U21ABZZXX"
+          ]
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Too many users in request error
+  description: Error when more than 400 user IDs are provided in a single request
+  
+  request: {
+    url: {{baseUrl}}/migration.exchange
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      users: 
+      ~team_id: 
+      ~to_old: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 400
+      text: Bad Request
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "too_many_users"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Authentication failure error
+  description: Error when the provided token is missing or invalid
+  
+  request: {
+    url: {{baseUrl}}/migration.exchange
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      users: 
+      ~team_id: 
+      ~to_old: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 401
+      text: Unauthorized
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "not_authed"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Not an Enterprise Grid team error
+  description: Error when the workspace is not part of an Enterprise Grid organization
+  
+  request: {
+    url: {{baseUrl}}/migration.exchange
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      users: 
+      ~team_id: 
+      ~to_old: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 403
+      text: Forbidden
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "not_enterprise_team"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Fatal server error
+  description: Unexpected server-side error
+  
+  request: {
+    url: {{baseUrl}}/migration.exchange
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      users: 
+      ~team_id: 
+      ~to_old: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "fatal_error"
+        }
+      '''
+    }
+  }
+}

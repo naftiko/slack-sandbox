@@ -1,0 +1,142 @@
+meta {
+  name: Get Team Access Logs
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/team.accessLogs
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  token: 
+  ~before: 
+  ~count: 
+  ~page: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: admin team:read users.profile:read
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful access logs response
+  
+  request: {
+    url: {{baseUrl}}/team.accessLogs
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~before: 
+      ~count: 
+      ~page: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "logins": [
+            {
+              "count": 1,
+              "country": "US",
+              "date_first": 1422922864,
+              "date_last": 1422922864,
+              "ip": "127.0.0.1",
+              "isp": "BigCo ISP",
+              "region": "CA",
+              "user_agent": "SlackWeb Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.35 Safari/537.36",
+              "user_id": "U45678",
+              "username": "alice"
+            },
+            {
+              "count": 1,
+              "country": "US",
+              "date_first": 1422922493,
+              "date_last": 1422922493,
+              "ip": "127.0.0.1",
+              "isp": "BigCo ISP",
+              "region": "CA",
+              "user_agent": "SlackWeb Mozilla/5.0 (iPhone; CPU iPhone OS 8_1_3 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12B466 Safari/600.1.4",
+              "user_id": "U12345",
+              "username": "white_rabbit"
+            }
+          ],
+          "paging": {
+            "count": 100,
+            "page": 1,
+            "pages": 1,
+            "total": 2
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Error response for paid_only
+  
+  request: {
+    url: {{baseUrl}}/team.accessLogs
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~before: 
+      ~count: 
+      ~page: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "paid_only"
+        }
+      '''
+    }
+  }
+}

@@ -1,0 +1,198 @@
+meta {
+  name: Exchange OAuth Code For Access Token
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/oauth.access
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  ~client_id: 
+  ~client_secret: 
+  ~code: 
+  ~redirect_uri: 
+  ~single_channel: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: none
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful legacy OAuth access token response
+  description: Example response when successfully exchanging code for access token
+  
+  request: {
+    url: {{baseUrl}}/oauth.access
+    method: GET
+    mode: none
+    params:query: {
+      ~client_id: 
+      ~client_secret: 
+      ~code: 
+      ~redirect_uri: 
+      ~single_channel: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "access_token": "example-key1234567890-1234567890123-abcdefghijklmnopqrstuvwx",
+          "scope": "groups:write",
+          "team_id": "TXXXXXXXXX",
+          "team_name": "Wyld Stallyns LLC",
+          "enterprise_id": null
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Invalid authorization code error
+  description: Error when the authorization code is invalid or expired
+  
+  request: {
+    url: {{baseUrl}}/oauth.access
+    method: GET
+    mode: none
+    params:query: {
+      ~client_id: 
+      ~client_secret: 
+      ~code: 
+      ~redirect_uri: 
+      ~single_channel: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 400
+      text: Bad Request
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_code"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Invalid client ID error
+  description: Error when the client_id parameter is invalid or missing
+  
+  request: {
+    url: {{baseUrl}}/oauth.access
+    method: GET
+    mode: none
+    params:query: {
+      ~client_id: 
+      ~client_secret: 
+      ~code: 
+      ~redirect_uri: 
+      ~single_channel: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 401
+      text: Unauthorized
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_client_id"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Generic OAuth error
+  description: Generic error response for unexpected failures
+  
+  request: {
+    url: {{baseUrl}}/oauth.access
+    method: GET
+    mode: none
+    params:query: {
+      ~client_id: 
+      ~client_secret: 
+      ~code: 
+      ~redirect_uri: 
+      ~single_channel: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "fatal_error"
+        }
+      '''
+    }
+  }
+}

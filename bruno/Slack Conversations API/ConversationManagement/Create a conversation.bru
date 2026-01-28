@@ -1,0 +1,269 @@
+meta {
+  name: Create a conversation
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/conversations.create
+  body: json
+  auth: oauth2
+}
+
+headers {
+  ~token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: channels:read channels:write channels:history groups:read groups:write groups:history im:read im:write im:history mpim:read mpim:write mpim:history
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+body:json {
+  {
+    "name": "",
+    "is_private": false
+  }
+}
+
+example {
+  name: Example of a successful create response (Example request to create a channel)
+  
+  request: {
+    url: {{baseUrl}}/conversations.create
+    method: POST
+    mode: json
+    headers: {
+      ~token: 
+    }
+  
+    body:json: {
+      {
+        "name": "my-new-channel",
+        "is_private": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "channel": {
+            "Id": "C0EAQDV4Z",
+            "Name": "endeavor",
+            "NameNormalized": "endeavor",
+            "IsChannel": true,
+            "IsGroup": false,
+            "IsIm": false,
+            "IsMpim": false,
+            "IsPrivate": false,
+            "IsArchived": false,
+            "IsGeneral": false,
+            "IsMember": true,
+            "IsShared": false,
+            "IsExtShared": false,
+            "IsOrgShared": false,
+            "IsPendingExtShared": false,
+            "Created": 1504554479,
+            "Creator": "U0123456",
+            "Unlinked": 0,
+            "LastRead": "0000000000.000000",
+            "Topic": {
+              "Value": "",
+              "Creator": "",
+              "LastSet": 0
+            },
+            "Purpose": {
+              "Value": "",
+              "Creator": "",
+              "LastSet": 0
+            },
+            "PreviousNames": [],
+            "PendingShared": []
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example of a successful create response (Example request to create a channel)
+  
+  request: {
+    url: {{baseUrl}}/conversations.create
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      ~token: 
+    }
+  
+    body:json: {
+      {
+        "name": "",
+        "is_private": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "channel": {
+            "Id": "C0EAQDV4Z",
+            "Name": "endeavor",
+            "NameNormalized": "endeavor",
+            "IsChannel": true,
+            "IsGroup": false,
+            "IsIm": false,
+            "IsMpim": false,
+            "IsPrivate": false,
+            "IsArchived": false,
+            "IsGeneral": false,
+            "IsMember": true,
+            "IsShared": false,
+            "IsExtShared": false,
+            "IsOrgShared": false,
+            "IsPendingExtShared": false,
+            "Created": 1504554479,
+            "Creator": "U0123456",
+            "Unlinked": 0,
+            "LastRead": "0000000000.000000",
+            "Topic": {
+              "Value": "",
+              "Creator": "",
+              "LastSet": 0
+            },
+            "Purpose": {
+              "Value": "",
+              "Creator": "",
+              "LastSet": 0
+            },
+            "PreviousNames": [],
+            "PendingShared": []
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example error response for create (Example request to create a channel)
+  
+  request: {
+    url: {{baseUrl}}/conversations.create
+    method: POST
+    mode: json
+    headers: {
+      ~token: 
+    }
+  
+    body:json: {
+      {
+        "name": "my-new-channel",
+        "is_private": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "name_taken"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example error response for create (Example request to create a channel)
+  
+  request: {
+    url: {{baseUrl}}/conversations.create
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      ~token: 
+    }
+  
+    body:json: {
+      {
+        "name": "",
+        "is_private": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "name_taken"
+        }
+      '''
+    }
+  }
+}

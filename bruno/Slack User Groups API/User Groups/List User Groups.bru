@@ -1,0 +1,175 @@
+meta {
+  name: List User Groups
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/Use Groups.list
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  token: 
+  ~include_users: 
+  ~include_count: 
+  ~include_disabled: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: Use Groups:read Use Groups:write
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful list of user groups
+  
+  request: {
+    url: {{baseUrl}}/Use Groups.list
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~include_users: 
+      ~include_count: 
+      ~include_disabled: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "Use Groups": [
+            {
+              "id": "S0614TZR7",
+              "team_id": "T060RNRCH",
+              "is_usergroup": true,
+              "is_external": false,
+              "name": "Team Admins",
+              "description": "A group of all Administrators on your team.",
+              "handle": "admins",
+              "date_create": 1446598059,
+              "date_update": 1446670362,
+              "date_delete": 0,
+              "auto_type": "admin",
+              "created_by": "USLACKBOT",
+              "updated_by": "U060RNRCZ",
+              "deleted_by": null,
+              "prefs": {
+                "channels": [],
+                "groups": []
+              },
+              "user_count": 2
+            },
+            {
+              "id": "S06158AV7",
+              "team_id": "T060RNRCH",
+              "is_usergroup": true,
+              "is_external": false,
+              "name": "Team Owners",
+              "description": "A group of all Owners on your team.",
+              "handle": "owners",
+              "date_create": 1446678371,
+              "date_update": 1446678371,
+              "date_delete": 0,
+              "auto_type": "owner",
+              "created_by": "USLACKBOT",
+              "updated_by": "USLACKBOT",
+              "deleted_by": null,
+              "prefs": {
+                "channels": [],
+                "groups": []
+              },
+              "user_count": 1
+            },
+            {
+              "id": "S0615G0KT",
+              "team_id": "T060RNRCH",
+              "is_usergroup": true,
+              "is_external": false,
+              "name": "Marketing Team",
+              "description": "Marketing gurus, PR experts and product advocates.",
+              "handle": "marketing-team",
+              "date_create": 1446746793,
+              "date_update": 1446747767,
+              "date_delete": 0,
+              "auto_type": null,
+              "created_by": "U060RNRCZ",
+              "updated_by": "U060RNRCZ",
+              "deleted_by": null,
+              "prefs": {
+                "channels": [],
+                "groups": []
+              },
+              "user_count": 3
+            }
+          ]
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Error response
+  
+  request: {
+    url: {{baseUrl}}/Use Groups.list
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~include_users: 
+      ~include_count: 
+      ~include_disabled: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

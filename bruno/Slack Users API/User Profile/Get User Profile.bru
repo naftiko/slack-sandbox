@@ -1,0 +1,126 @@
+meta {
+  name: Get User Profile
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/users.profile.get
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  token: 
+  ~user: 
+  ~include_labels: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: users:read users:read.email users:write users.profile:read users.profile:write channels:read groups:read im:read mpim:read identity.basic
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful get profile response
+  
+  request: {
+    url: {{baseUrl}}/users.profile.get
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~user: 
+      ~include_labels: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "profile": {
+            "avatar_hash": "ge3b51ca72de",
+            "display_name": "spengler",
+            "display_name_normalized": "spengler",
+            "email": "spengler@ghostbusters.example.com",
+            "image_24": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "image_32": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "image_48": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "image_72": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "image_192": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "image_512": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "image_original": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "real_name": "Egon Spengler",
+            "real_name_normalized": "Egon Spengler",
+            "status_emoji": ":books:",
+            "status_expiration": 0,
+            "status_text": "Print is dead",
+            "team": "T012AB3C4"
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Profile error response
+  
+  request: {
+    url: {{baseUrl}}/users.profile.get
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~user: 
+      ~include_labels: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "user_not_found"
+        }
+      '''
+    }
+  }
+}

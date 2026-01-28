@@ -1,0 +1,167 @@
+meta {
+  name: List files
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/files.list
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  ~token: 
+  ~user: 
+  ~channel: 
+  ~ts_from: 
+  ~ts_to: 
+  ~types: 
+  ~count: 
+  ~page: 
+  ~show_files_hidden_by_limit: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: files:read files:write:user remote_files:read remote_files:write remote_files:share
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Example of a successful files.list response
+  
+  request: {
+    url: {{baseUrl}}/files.list
+    method: GET
+    mode: none
+    params:query: {
+      ~token: 
+      ~user: 
+      ~channel: 
+      ~ts_from: 
+      ~ts_to: 
+      ~types: 
+      ~count: 
+      ~page: 
+      ~show_files_hidden_by_limit: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "files": [
+            {
+              "Id": "F0S43P1CZ",
+              "Name": "billair.gif",
+              "Title": "billair.gif",
+              "Mimetype": "image/gif",
+              "Filetype": "gif",
+              "PrettyType": "GIF",
+              "User": "U061F7AUR",
+              "Mode": "hosted",
+              "IsExternal": false,
+              "IsPublic": true,
+              "Size": 144538,
+              "Created": 1531763254,
+              "Channels": [
+                "C0T8SE4AU"
+              ]
+            },
+            {
+              "Id": "F0S43PZDF",
+              "Name": "tedair.gif",
+              "Title": "tedair.gif",
+              "Mimetype": "image/gif",
+              "Filetype": "gif",
+              "PrettyType": "GIF",
+              "User": "U061F7AUR",
+              "Mode": "hosted",
+              "IsExternal": false,
+              "IsPublic": true,
+              "Size": 137531,
+              "Created": 1531763342,
+              "Channels": [
+                "C0T8SE4AU"
+              ]
+            }
+          ],
+          "paging": {
+            "Count": 100,
+            "Total": 2,
+            "Page": 1,
+            "Pages": 1
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example error response for files.list
+  
+  request: {
+    url: {{baseUrl}}/files.list
+    method: GET
+    mode: none
+    params:query: {
+      ~token: 
+      ~user: 
+      ~channel: 
+      ~ts_from: 
+      ~ts_to: 
+      ~types: 
+      ~count: 
+      ~page: 
+      ~show_files_hidden_by_limit: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

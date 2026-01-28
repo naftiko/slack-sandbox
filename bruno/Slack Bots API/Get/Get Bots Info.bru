@@ -1,0 +1,100 @@
+meta {
+  name: Get Bots Info
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/bots.info
+  body: none
+  auth: inherit
+}
+
+params:query {
+  token: 
+  ~bot: 
+}
+
+example {
+  name: 200 Response
+  description: When successful, returns bot info by bot ID.
+  
+  request: {
+    url: {{baseUrl}}/bots.info
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~bot: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "bot": {
+            "app_id": "A161CLERW",
+            "deleted": false,
+            "icons": {
+              "image_36": "https://...",
+              "image_48": "https://...",
+              "image_72": "https://..."
+            },
+            "id": "B061F7JD2",
+            "name": "beforebot",
+            "updated": 1449272004,
+            "user_id": "U012ABCDEF"
+          },
+          "ok": true
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: default Response
+  description: When no bot can be found, it returns an error.
+  
+  request: {
+    url: {{baseUrl}}/bots.info
+    method: GET
+    mode: none
+    params:query: {
+      token: 
+      ~bot: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "error": "bot_not_found",
+          "ok": false
+        }
+      '''
+    }
+  }
+}

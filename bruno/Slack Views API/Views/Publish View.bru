@@ -1,0 +1,155 @@
+meta {
+  name: Publish View
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/views.publish
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  user_id: 
+  view: 
+  ~hash: 
+}
+
+headers {
+  token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: none
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful view publish response
+  
+  request: {
+    url: {{baseUrl}}/views.publish
+    method: GET
+    mode: none
+    params:query: {
+      user_id: 
+      view: 
+      ~hash: 
+    }
+  
+    headers: {
+      token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "view": {
+            "id": "VMHU10V25",
+            "type": "home",
+            "blocks": [
+              {
+                "type": "section",
+                "block_id": "2WGp9",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "A simple section with some sample sentence.",
+                  "verbatim": false
+                }
+              }
+            ],
+            "private_metadata": "Shh it is a secret",
+            "callback_id": "identify_your_home_tab",
+            "clear_on_close": false,
+            "notify_on_close": false,
+            "external_id": "",
+            "hash": "156772938.1827394",
+            "root_view_id": "VMHU10V25",
+            "previous_view_id": null,
+            "submit": null,
+            "close": null,
+            "app_id": "AA4928AQ",
+            "bot_id": "BA13894H",
+            "team_id": "T8N4K1JN",
+            "state": {
+              "values": {}
+            }
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Invalid user_id error response
+  
+  request: {
+    url: {{baseUrl}}/views.publish
+    method: GET
+    mode: none
+    params:query: {
+      user_id: 
+      view: 
+      ~hash: 
+    }
+  
+    headers: {
+      token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_arguments",
+          "response_metadata": {
+            "messages": [
+              "invalid `user_id`"
+            ]
+          }
+        }
+      '''
+    }
+  }
+}

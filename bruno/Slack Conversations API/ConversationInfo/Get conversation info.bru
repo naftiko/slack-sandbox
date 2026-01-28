@@ -1,0 +1,149 @@
+meta {
+  name: Get conversation info
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/conversations.info
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  ~token: 
+  ~channel: 
+  ~include_locale: 
+  ~include_num_members: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: channels:read channels:write channels:history groups:read groups:write groups:history im:read im:write im:history mpim:read mpim:write mpim:history
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Example of a successful info response
+  
+  request: {
+    url: {{baseUrl}}/conversations.info
+    method: GET
+    mode: none
+    params:query: {
+      ~token: 
+      ~channel: 
+      ~include_locale: 
+      ~include_num_members: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "channel": {
+            "Id": "C012AB3CD",
+            "Name": "general",
+            "NameNormalized": "general",
+            "IsChannel": true,
+            "IsGroup": false,
+            "IsIm": false,
+            "IsMpim": false,
+            "IsPrivate": false,
+            "IsArchived": false,
+            "IsGeneral": true,
+            "IsMember": true,
+            "IsShared": false,
+            "IsExtShared": false,
+            "IsOrgShared": false,
+            "IsPendingExtShared": false,
+            "IsReadOnly": false,
+            "Created": 1449252889,
+            "Creator": "W012A3BCD",
+            "Unlinked": 0,
+            "LastRead": "1502126650.228446",
+            "Locale": "en-US",
+            "Topic": {
+              "Value": "For public discussion of generalities",
+              "Creator": "W012A3BCD",
+              "LastSet": 1449709364
+            },
+            "Purpose": {
+              "Value": "This part of the workspace is for fun. Make fun here.",
+              "Creator": "W012A3BCD",
+              "LastSet": 1449709364
+            },
+            "PreviousNames": [
+              "specifics",
+              "abstractions",
+              "etc"
+            ],
+            "PendingShared": []
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example error response for info
+  
+  request: {
+    url: {{baseUrl}}/conversations.info
+    method: GET
+    mode: none
+    params:query: {
+      ~token: 
+      ~channel: 
+      ~include_locale: 
+      ~include_num_members: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "channel_not_found"
+        }
+      '''
+    }
+  }
+}

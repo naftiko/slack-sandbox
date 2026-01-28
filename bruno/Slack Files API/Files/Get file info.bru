@@ -1,0 +1,147 @@
+meta {
+  name: Get file info
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/files.info
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  ~token: 
+  ~file: 
+  ~count: 
+  ~page: 
+  ~limit: 
+  ~cursor: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: files:read files:write:user remote_files:read remote_files:write remote_files:share
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Example of a successful files.info response
+  
+  request: {
+    url: {{baseUrl}}/files.info
+    method: GET
+    mode: none
+    params:query: {
+      ~token: 
+      ~file: 
+      ~count: 
+      ~page: 
+      ~limit: 
+      ~cursor: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "file": {
+            "Id": "F0S43PZDF",
+            "Name": "tedair.gif",
+            "Title": "tedair.gif",
+            "Mimetype": "image/gif",
+            "Filetype": "gif",
+            "PrettyType": "GIF",
+            "User": "U061F7AUR",
+            "Mode": "hosted",
+            "Editable": false,
+            "IsExternal": false,
+            "IsPublic": true,
+            "IsStarred": false,
+            "PublicUrlShared": false,
+            "Size": 137531,
+            "Created": 1531763342,
+            "Timestamp": 1531763342,
+            "OriginalH": 226,
+            "OriginalW": 176,
+            "HasRichPreview": false,
+            "CommentsCount": 0,
+            "Channels": [
+              "C0T8SE4AU"
+            ],
+            "Groups": [],
+            "Ims": []
+          },
+          "comments": [],
+          "response_metadata": {
+            "NextCursor": "dGVhbTpDMUg5UkVTR0w="
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Example error response for files.info
+  
+  request: {
+    url: {{baseUrl}}/files.info
+    method: GET
+    mode: none
+    params:query: {
+      ~token: 
+      ~file: 
+      ~count: 
+      ~page: 
+      ~limit: 
+      ~cursor: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_auth"
+        }
+      '''
+    }
+  }
+}

@@ -1,0 +1,193 @@
+meta {
+  name: List Users
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/users.list
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  ~token: 
+  ~limit: 
+  ~cursor: 
+  ~include_locale: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: users:read users:read.email users:write users.profile:read users.profile:write channels:read groups:read im:read mpim:read identity.basic
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful list users response
+  
+  request: {
+    url: {{baseUrl}}/users.list
+    method: GET
+    mode: none
+    params:query: {
+      ~token: 
+      ~limit: 
+      ~cursor: 
+      ~include_locale: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "cache_ts": 1498777272,
+          "members": [
+            {
+              "id": "W012A3CDE",
+              "team_id": "T012AB3C4",
+              "name": "spengler",
+              "real_name": "Egon Spengler",
+              "color": "9f69e7",
+              "deleted": false,
+              "has_2fa": false,
+              "is_admin": true,
+              "is_app_user": false,
+              "is_bot": false,
+              "is_owner": false,
+              "is_primary_owner": false,
+              "is_restricted": false,
+              "is_ultra_restricted": false,
+              "profile": {
+                "avatar_hash": "ge3b51ca72de",
+                "display_name": "spengler",
+                "display_name_normalized": "spengler",
+                "email": "spengler@ghostbusters.example.com",
+                "image_24": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+                "image_32": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+                "image_48": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+                "image_72": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+                "image_192": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+                "image_512": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+                "real_name": "Egon Spengler",
+                "real_name_normalized": "Egon Spengler",
+                "status_emoji": ":books:",
+                "status_text": "Print is dead",
+                "team": "T012AB3C4"
+              },
+              "tz": "America/Los_Angeles",
+              "tz_label": "Pacific Daylight Time",
+              "tz_offset": -25200,
+              "updated": 1502138686
+            },
+            {
+              "id": "W07QCRPA4",
+              "team_id": "T0G9PQBBK",
+              "name": "glinda",
+              "real_name": "Glinda Southgood",
+              "color": "9f69e7",
+              "deleted": false,
+              "has_2fa": false,
+              "is_admin": true,
+              "is_bot": false,
+              "is_owner": false,
+              "is_primary_owner": false,
+              "is_restricted": false,
+              "is_ultra_restricted": false,
+              "profile": {
+                "avatar_hash": "8fbdd10b41c6",
+                "display_name": "Glinda the Fairly Good",
+                "display_name_normalized": "Glinda the Fairly Good",
+                "email": "glenda@south.oz.coven",
+                "first_name": "Glinda",
+                "last_name": "Southgood",
+                "image_24": "https://example.com/avatar.png",
+                "image_32": "https://example.com/avatar.png",
+                "image_48": "https://example.com/avatar.png",
+                "image_72": "https://example.com/avatar.png",
+                "image_192": "https://example.com/avatar.png",
+                "image_512": "https://example.com/avatar.png",
+                "image_1024": "https://example.com/avatar.png",
+                "image_original": "https://example.com/avatar.png",
+                "phone": "",
+                "real_name": "Glinda Southgood",
+                "real_name_normalized": "Glinda Southgood",
+                "skype": "",
+                "title": "Glinda the Good"
+              },
+              "tz": "America/Los_Angeles",
+              "tz_label": "Pacific Daylight Time",
+              "tz_offset": -25200,
+              "updated": 1480527098
+            }
+          ],
+          "response_metadata": {
+            "next_cursor": "dXNlcjpVMEc5V0ZYTlo="
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: List users error response
+  
+  request: {
+    url: {{baseUrl}}/users.list
+    method: GET
+    mode: none
+    params:query: {
+      ~token: 
+      ~limit: 
+      ~cursor: 
+      ~include_locale: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_cursor"
+        }
+      '''
+    }
+  }
+}

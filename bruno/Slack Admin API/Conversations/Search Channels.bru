@@ -1,0 +1,167 @@
+meta {
+  name: Search Channels
+  type: http
+  seq: 14
+}
+
+get {
+  url: {{baseUrl}}/admin.conversations.search
+  body: none
+  auth: oauth2
+}
+
+params:query {
+  ~team_ids: 
+  ~query: 
+  ~limit: 
+  ~cursor: 
+  ~search_channel_types: 
+  ~sort: 
+  ~sort_dir: 
+}
+
+headers {
+  token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: admin.apps:read admin.apps:write admin.conversations:read admin.conversations:write admin.invites:read admin.invites:write admin.teams:read admin.teams:write admin.Use Groups:read admin.Use Groups:write admin.users:read admin.users:write
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+example {
+  name: Successful channel search response
+  
+  request: {
+    url: {{baseUrl}}/admin.conversations.search
+    method: GET
+    mode: none
+    params:query: {
+      ~team_ids: 
+      ~query: 
+      ~limit: 
+      ~cursor: 
+      ~search_channel_types: 
+      ~sort: 
+      ~sort_dir: 
+    }
+  
+    headers: {
+      token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "channels": [
+            {
+              "id": "C012AB3CD",
+              "name": "general",
+              "name_normalized": "general",
+              "is_channel": true,
+              "is_group": false,
+              "is_im": false,
+              "is_mpim": false,
+              "is_private": false,
+              "is_archived": false,
+              "is_general": true,
+              "is_shared": false,
+              "is_ext_shared": false,
+              "is_org_shared": false,
+              "is_pending_ext_shared": false,
+              "is_member": true,
+              "unlinked": 0,
+              "created": 1449252889,
+              "creator": "U012A3CDE",
+              "num_members": 4,
+              "pending_shared": [],
+              "previous_names": [],
+              "topic": {
+                "value": "Company-wide announcements and work-based matters",
+                "creator": "",
+                "last_set": 0
+              },
+              "purpose": {
+                "value": "This channel is for team-wide communication and announcements. All team members are in this channel.",
+                "creator": "",
+                "last_set": 0
+              }
+            }
+          ],
+          "next_cursor": "dGVhbTpDMDYxRkE1UEI="
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Not an enterprise error
+  
+  request: {
+    url: {{baseUrl}}/admin.conversations.search
+    method: GET
+    mode: none
+    params:query: {
+      ~team_ids: 
+      ~query: 
+      ~limit: 
+      ~cursor: 
+      ~search_channel_types: 
+      ~sort: 
+      ~sort_dir: 
+    }
+  
+    headers: {
+      token: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "not_an_enterprise"
+        }
+      '''
+    }
+  }
+}

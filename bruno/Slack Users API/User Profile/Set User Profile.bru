@@ -1,0 +1,255 @@
+meta {
+  name: Set User Profile
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/users.profile.set
+  body: formUrlEncoded
+  auth: oauth2
+}
+
+headers {
+  token: 
+}
+
+auth:oauth2 {
+  grant_type: authorization_code
+  callback_url: {{oauth_callback_url}}
+  authorization_url: https://slack.com/oauth/v2/authorize
+  access_token_url: https://slack.com/api/oauth.v2.access
+  refresh_token_url: {{oauth_refresh_url}}
+  client_id: {{oauth_client_id}}
+  client_secret: {{oauth_client_secret}}
+  scope: users:read users:read.email users:write users.profile:read users.profile:write channels:read groups:read im:read mpim:read identity.basic
+  state: {{oauth_state}}
+  pkce: false
+  credentials_placement: header
+  credentials_id: 
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: false
+  auto_refresh_token: true
+}
+
+body:form-urlencoded {
+  name: 
+  value: 
+  profile: 
+  user: 
+}
+
+example {
+  name: Successful set profile response (Set user profile request)
+  
+  request: {
+    url: {{baseUrl}}/users.profile.set
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:form-urlencoded: {
+      name: 
+      value: 
+      profile: 
+      user: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "username": "spengler",
+          "profile": {
+            "avatar_hash": "ge3b51ca72de",
+            "display_name": "spengler",
+            "display_name_normalized": "spengler",
+            "email": "spengler@ghostbusters.example.com",
+            "image_24": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "image_32": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "image_48": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "image_72": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "image_192": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "image_512": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "real_name": "Egon Spengler",
+            "real_name_normalized": "Egon Spengler",
+            "status_emoji": ":books:",
+            "status_expiration": 0,
+            "status_text": "Print is dead",
+            "team": "T012AB3C4"
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Successful set profile response (Set user profile request)
+  
+  request: {
+    url: {{baseUrl}}/users.profile.set
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "name": "status_text",
+        "value": "Working from home"
+      }
+    }
+  
+    body:form-urlencoded: {
+      name: 
+      value: 
+      profile: 
+      user: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": true,
+          "username": "spengler",
+          "profile": {
+            "avatar_hash": "ge3b51ca72de",
+            "display_name": "spengler",
+            "display_name_normalized": "spengler",
+            "email": "spengler@ghostbusters.example.com",
+            "image_24": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "image_32": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "image_48": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "image_72": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "image_192": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "image_512": "https://example.com/avatar/e3b51ca72dee4ef87916ae2b9240df50.jpg",
+            "real_name": "Egon Spengler",
+            "real_name_normalized": "Egon Spengler",
+            "status_emoji": ":books:",
+            "status_expiration": 0,
+            "status_text": "Print is dead",
+            "team": "T012AB3C4"
+          }
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Set profile error response (Set user profile request)
+  
+  request: {
+    url: {{baseUrl}}/users.profile.set
+    method: POST
+    mode: formUrlEncoded
+    headers: {
+      token: 
+    }
+  
+    body:form-urlencoded: {
+      name: 
+      value: 
+      profile: 
+      user: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_profile"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Set profile error response (Set user profile request)
+  
+  request: {
+    url: {{baseUrl}}/users.profile.set
+    method: POST
+    mode: json
+    headers: {
+      token: 
+    }
+  
+    body:json: {
+      {
+        "name": "status_text",
+        "value": "Working from home"
+      }
+    }
+  
+    body:form-urlencoded: {
+      name: 
+      value: 
+      profile: 
+      user: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: application/json
+    }
+  
+    status: {
+      code: default
+      text: Unknown
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "ok": false,
+          "error": "invalid_profile"
+        }
+      '''
+    }
+  }
+}
