@@ -13,7 +13,7 @@ metadata:
     security/compliance controls such as information barriers, session and
     authentication policies, and org-level analytics exports.
   tags:
-    - Apps
+    - Applications
     - Conversations
     - Emoji
     - Invite Requests
@@ -73,7 +73,7 @@ spec:
           summary: Approve App for Installation
           description: Approve an app for installation on a workspace.
           tags:
-            - Apps
+            - Applications
           externalDocs:
             description: API method documentation
             url: https://api.slack.com/methods/admin.apps.approve
@@ -129,7 +129,7 @@ spec:
           summary: List Approved Apps
           description: List approved apps for an org or workspace.
           tags:
-            - Apps
+            - Applications
           externalDocs:
             description: API method documentation
             url: https://api.slack.com/methods/admin.apps.approved.list
@@ -175,7 +175,7 @@ spec:
           summary: List App Requests
           description: List app requests for a team/workspace.
           tags:
-            - Apps
+            - Applications
           externalDocs:
             description: API method documentation
             url: https://api.slack.com/methods/admin.apps.requests.list
@@ -220,7 +220,7 @@ spec:
           summary: Restrict App Installation
           description: Restrict an app for installation on a workspace.
           tags:
-            - Apps
+            - Applications
           externalDocs:
             description: API method documentation
             url: https://api.slack.com/methods/admin.apps.restrict
@@ -274,7 +274,7 @@ spec:
           summary: List Restricted Apps
           description: List restricted apps for an org or workspace.
           tags:
-            - Apps
+            - Applications
           externalDocs:
             description: API method documentation
             url: https://api.slack.com/methods/admin.apps.restricted.list

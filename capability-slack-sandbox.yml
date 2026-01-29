@@ -788,7 +788,7 @@ metrics:
   numberOfHeaders: 0
   tags:
     - Api Testing
-    - Apps
+    - Applications
     - Authentication
     - Bots
     - Call Participants

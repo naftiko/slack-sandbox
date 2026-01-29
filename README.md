@@ -59,7 +59,7 @@ These are the OpenAPIs available for the Slack API & MCP Sandbox, which are made
 These are the resources available via the Slack API & MCP Sandbox, which are made available via this sandbox API, which are applied as tags to each operation in the OpenAPI.
 
   - Api Testing
-  - Apps
+  - Applications
   - Authentication
   - Bots
   - Call Participants
