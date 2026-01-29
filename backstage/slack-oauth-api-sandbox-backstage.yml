@@ -50,6 +50,8 @@ spec:
     servers:
       - url: https://slack.com/api
         description: Slack API Production Server
+      - url: http://localhost:8080/rest/slack-oauth-api/1.0.0
+        description: Sandbox
     tags:
       - name: OAuth Legacy
         description: Legacy OAuth 1.0 token exchange operations

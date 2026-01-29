@@ -21,6 +21,8 @@ info:
 servers:
   - url: https://slack.com/api
     description: Slack API Production Server
+  - url: http://localhost:8080/rest/slack-migration-api/1.0.0
+    description: Sandbox
 tags:
   - name: Migration
     description: Operations for migrating workspace identifiers to Enterprise Grid

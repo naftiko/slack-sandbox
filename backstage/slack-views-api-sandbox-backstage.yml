@@ -41,6 +41,8 @@ spec:
     servers:
       - url: https://slack.com/api
         description: Slack API Production Server
+      - url: http://localhost:8080/rest/slack-views-api/1.0.0
+        description: Sandbox
     tags:
       - name: Views
         description: Operations for managing Slack views including modals and App Home tabs

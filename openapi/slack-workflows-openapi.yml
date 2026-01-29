@@ -16,6 +16,8 @@ info:
 servers:
   - url: https://slack.com/api
     description: Slack API Production Server
+  - url: http://localhost:8080/rest/slack-workflows-api/1.0.0
+    description: Sandbox
 tags:
   - name: Workflows
     description: Operations for managing workflow step execution and configuration

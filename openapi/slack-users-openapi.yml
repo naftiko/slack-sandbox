@@ -24,6 +24,8 @@ info:
 servers:
   - url: https://slack.com/api
     description: Slack Web API
+  - url: http://localhost:8080/rest/slack-users-api/1.0.0
+    description: Sandbox
 tags:
   - name: User Conversations
     description: Operations for listing user conversations

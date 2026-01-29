@@ -23,6 +23,8 @@ info:
 servers:
   - url: https://slack.com/api
     description: Slack API Production Server
+  - url: http://localhost:8080/rest/slack-chat-api/1.0.0
+    description: Sandbox
 tags:
   - name: Messages
     description: Operations for sending, updating, and deleting messages

@@ -45,6 +45,8 @@ spec:
     servers:
       - url: https://slack.com/api
         description: Slack API Production Server
+      - url: http://localhost:8080/rest/slack-pins-api/1.0.0
+        description: Sandbox
     tags:
       - name: Pins
         description: Operations for managing pinned items in Slack conversations

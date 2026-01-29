@@ -24,6 +24,8 @@ info:
 servers:
   - url: https://slack.com/api
     description: Slack API Production Server
+  - url: http://localhost:8080/rest/slack-auth-api/1.0.0
+    description: Sandbox
 tags:
   - name: Authentication
     description: Operations for verifying and managing authentication tokens

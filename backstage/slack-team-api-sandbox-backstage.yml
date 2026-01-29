@@ -43,6 +43,8 @@ spec:
     servers:
       - url: https://slack.com
         description: Slack Production API Server
+      - url: http://localhost:8080/rest/slack-team-api/1.0.0
+        description: Sandbox
     tags:
       - name: Team Access Logs
         description: Operations for retrieving team access logs

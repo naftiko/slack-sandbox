@@ -35,6 +35,8 @@ info:
 servers:
   - url: https://slack.com/api
     description: Slack API Production Server
+  - url: http://localhost:8080/rest/slack-reminders-api/1.0.0
+    description: Sandbox
 tags:
   - name: Reminders
     description: Operations for creating and managing personal reminders

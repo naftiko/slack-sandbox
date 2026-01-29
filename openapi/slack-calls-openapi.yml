@@ -21,6 +21,8 @@ info:
 servers:
   - url: https://slack.com/api
     description: Slack API Production Server
+  - url: http://localhost:8080/rest/slack-calls-api/1.0.0
+    description: Sandbox
 tags:
   - name: Calls
     description: Operations for managing Call objects in Slack

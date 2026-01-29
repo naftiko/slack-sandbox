@@ -37,6 +37,8 @@ info:
 servers:
   - url: https://slack.com/api
     description: Slack API Production Server
+  - url: http://localhost:8080/rest/slack-rtm-api/1.0.0
+    description: Sandbox
 tags:
   - name: Rtm
     description: Real Time Messaging operations for WebSocket connections

@@ -7,7 +7,7 @@ info:
     This is a Slack sandbox that uses OpenAPI, Microcks, Bruno, and Backstage to
     provide a 3rd-party REST API and MCP sandbox for Slack.
   tags:
-    - Messageing
+    - Messaging
     - Chat
 ports:
   source:

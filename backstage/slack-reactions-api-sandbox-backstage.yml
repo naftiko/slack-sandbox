@@ -83,6 +83,8 @@ spec:
     servers:
       - url: https://slack.com/api
         description: Slack API Production Server
+      - url: http://localhost:8080/rest/slack-reactions-api/1.0.0
+        description: Sandbox
     tags:
       - name: Reactions
         description: Operations for managing emoji reactions on messages and files

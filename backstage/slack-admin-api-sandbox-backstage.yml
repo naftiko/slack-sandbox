@@ -13,7 +13,7 @@ metadata:
     security/compliance controls such as information barriers, session and
     authentication policies, and org-level analytics exports.
   tags:
-    - Applications
+    - Apps
     - Conversations
     - Emoji
     - Invite Requests
@@ -51,6 +51,8 @@ spec:
     servers:
       - url: https://slack.com/api
         description: Slack API Production Server
+      - url: http://localhost:8080/rest/slack-admin-api/1.0.0
+        description: Sandbox
     tags:
       - name: Apps
         description: Operations for managing app approvals, restrictions, and requests
@@ -1535,9 +1537,7 @@ spec:
                   $ref: '#/components/schemas/AdminInvite RequestsApproveRequest'
                 examples:
                   ApproveRequest:
-                    $ref: >-
-                      #/components/examples/AdminInvite
-                      RequestsApproveRequestExample
+                    $ref: '#/components/examples/AdminInviteRequestsApproveRequestExample'
               application/x-www-form-urlencoded:
                 schema:
                   $ref: '#/components/schemas/AdminInvite RequestsApproveRequest'
@@ -1681,7 +1681,7 @@ spec:
                   $ref: '#/components/schemas/AdminInvite RequestsDenyRequest'
                 examples:
                   DenyRequest:
-                    $ref: '#/components/examples/AdminInvite RequestsDenyRequestExample'
+                    $ref: '#/components/examples/AdminInviteRequestsDenyRequestExample'
               application/x-www-form-urlencoded:
                 schema:
                   $ref: '#/components/schemas/AdminInvite RequestsDenyRequest'
@@ -4606,7 +4606,7 @@ spec:
           value:
             invite_request_id: Ir0XJGFLMLS
             team_id: T1234
-        AdminInvite RequestsDenyRequestExample:
+        AdminInviteRequestsDenyRequestExample:
           summary: Deny invite request
           value:
             invite_request_id: Ir0XJGFLMLS

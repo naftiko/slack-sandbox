@@ -35,6 +35,8 @@ spec:
     servers:
       - url: https://slack.com
         description: Slack Production API Server
+      - url: http://localhost:8080/rest/slack-tests-api/1.0.0
+        description: Sandbox
     tags:
       - name: API Testing
         description: Operations for testing API connectivity and functionality

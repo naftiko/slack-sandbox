@@ -26,6 +26,8 @@ spec:
     servers:
       - url: https://slack.com/api
         description: Slack API Production Server
+      - url: http://localhost:8080/rest/slack-bots-api/1.0.0
+        description: Sandbox
     paths:
       /bots.info:
         get:

@@ -25,6 +25,8 @@ info:
 servers:
   - url: https://slack.com/api
     description: Slack API Production Server
+  - url: http://localhost:8080/rest/slack-dnd-api/1.0.0
+    description: Sandbox
 tags:
   - name: Do Not Disturb Status
     description: Operations for retrieving Do Not Disturb status

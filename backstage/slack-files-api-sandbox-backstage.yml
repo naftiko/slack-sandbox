@@ -52,6 +52,8 @@ spec:
     servers:
       - url: https://slack.com/api
         description: Slack API Production Server
+      - url: http://localhost:8080/rest/slack-files-api/1.0.0
+        description: Sandbox
     tags:
       - name: Files
         description: Operations for managing files (upload, delete, info, list)

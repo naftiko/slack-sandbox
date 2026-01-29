@@ -24,6 +24,8 @@ info:
 servers:
   - url: https://slack.com/api
     description: Slack Web API
+  - url: http://localhost:8080/rest/slack-user-groups-api/1.0.0
+    description: Sandbox
 tags:
   - name: User Groups
     description: Operations for managing user groups

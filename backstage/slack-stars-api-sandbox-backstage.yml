@@ -45,6 +45,8 @@ spec:
     servers:
       - url: https://slack.com/api
         description: Slack Web API Production Server
+      - url: http://localhost:8080/rest/slack-stars-api/1.0.0
+        description: Sandbox
     tags:
       - name: Stars
         description: Operations for managing starred items in Slack
