@@ -1,0 +1,21 @@
+naftiko: "1.0.0-alpha2"
+consumes:
+  - namespace: slack-admin-api
+    type: http
+    baseUri: "https://mocks.naftiko.net/rest/slack-admin-api/1.0.0"
+    resources:
+      - name: admin-apps-approved-list
+        path: "/admin.apps.approved.list"
+        operations:
+          - name: admin-apps-approved-list
+            method: GET
+      - name: admin-apps-requests-list
+        path: "/admin.apps.requests.list"
+        operations:
+          - name: admin-apps-requests-list
+            method: GET
+      - name: admin-apps-restricted-list
+        path: "/admin.apps.restricted.list"
+        operations:
+          - name: admin-apps-restricted-list
+            method: GET

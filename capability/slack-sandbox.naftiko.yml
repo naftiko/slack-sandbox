@@ -1,0 +1,80 @@
+naftiko: "1.0.0-alpha2"
+
+info:
+  label: "Slack Sandbox"
+  description: "Naftiko Sandbox — wraps the Slack API mocks hosted at mocks.naftiko.net. Exposes MCP, REST, and Skill adapters for AI agents and downstream tools."
+  tags:
+    - "Slack"
+    - "Naftiko Sandbox"
+    - MCP
+    - Mocks
+
+binds:
+  - namespace: "sandbox-env"
+    description: "Sandbox bearer token for the Naftiko Framework MCP server."
+    location: "file:///./shared/secrets.yaml"
+    keys:
+      MCP_SERVER_TOKEN: "mcp-server-token"
+
+capability:
+  consumes:
+    - import: slack-admin-api
+      location: ./shared/slack-admin-api-consumes.yml
+
+  exposes:
+    - type: mcp
+      address: "0.0.0.0"
+      port: 3001
+      namespace: slack-sandbox-tools
+      authentication:
+        type: bearer
+        token: "{{MCP_SERVER_TOKEN}}"
+      description: "Slack MCP tools — backed by mocks.naftiko.net"
+      tools:
+        - name: admin-apps-approved-list
+          description: "List Approved Apps"
+          call: slack-admin-api.admin-apps-approved-list
+        - name: admin-apps-requests-list
+          description: "List App Requests"
+          call: slack-admin-api.admin-apps-requests-list
+        - name: admin-apps-restricted-list
+          description: "List Restricted Apps"
+          call: slack-admin-api.admin-apps-restricted-list
+
+    - type: rest
+      address: "0.0.0.0"
+      port: 3002
+      namespace: slack-sandbox-api
+      description: "Slack REST adapter — exposes the same domain as REST resources."
+      resources:
+        - name: admin-apps-approved-list
+          path: "/admin-apps-approved-list"
+          operations:
+            - method: GET
+              call: slack-admin-api.admin-apps-approved-list
+        - name: admin-apps-requests-list
+          path: "/admin-apps-requests-list"
+          operations:
+            - method: GET
+              call: slack-admin-api.admin-apps-requests-list
+        - name: admin-apps-restricted-list
+          path: "/admin-apps-restricted-list"
+          operations:
+            - method: GET
+              call: slack-admin-api.admin-apps-restricted-list
+
+    - type: skill
+      address: "0.0.0.0"
+      port: 3003
+      namespace: slack-sandbox-skills
+      description: "Slack skill server for structured agent discovery."
+      groups:
+        - name: read-slack
+          description: "Read-only Slack operations."
+          skills:
+            - name: admin-apps-approved-list
+              call: slack-admin-api.admin-apps-approved-list
+            - name: admin-apps-requests-list
+              call: slack-admin-api.admin-apps-requests-list
+            - name: admin-apps-restricted-list
+              call: slack-admin-api.admin-apps-restricted-list
